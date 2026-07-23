@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8"/>
+<title>DrillGuard OS report</title>
+<style>
+body{font-family:Segoe UI,Arial,sans-serif;margin:24px;color:#122}
+.banner{background:#fff3cd;border:1px solid #856404;padding:12px;margin-bottom:16px}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #ccc;padding:6px;font-size:13px;vertical-align:top}
+th{background:#f4f4f4;text-align:left}
+.meta{color:#555;font-size:13px}
+</style></head><body>
+<div class="banner"><strong>Synthetic benchmark only. Not field accuracy.</strong></div>
+<h1>DrillGuard OS — event cards</h1>
+<p class="meta">version=0.2.0
+ | origin=synthetic
+ | source=benchmark
+ | score=n/a</p>
+<pre>{
+  &quot;n_cases&quot;: 45,
+  &quot;event_hit_rate&quot;: 1.0,
+  &quot;f1&quot;: {
+    &quot;mean&quot;: 0.8021688888888889,
+    &quot;p05&quot;: 0.0482,
+    &quot;median&quot;: 0.9398,
+    &quot;p95&quot;: 1.0,
+    &quot;worst&quot;: 0.0482
+  },
+  &quot;detection_delay_s&quot;: {
+    &quot;mean&quot;: 18.2,
+    &quot;p05&quot;: 0.0,
+    &quot;median&quot;: 22.0,
+    &quot;p95&quot;: 36.3,
+    &quot;worst&quot;: 40.0
+  },
+  &quot;false_alarms_per_hour&quot;: {
+    &quot;mean&quot;: 0.0,
+    &quot;p05&quot;: 0.0,
+    &quot;median&quot;: 0.0,
+    &quot;p95&quot;: 0.0,
+    &quot;worst&quot;: 0.0
+  },
+  &quot;claim_level&quot;: &quot;synthetic_only&quot;,
+  &quot;requires_field_validation&quot;: true
+}</pre>
+<table>
+<thead><tr><th>Start</th><th>Class</th><th>Score</th><th>Regime</th><th>Check</th><th>Unknowns</th></tr></thead>
+<tbody>
+<tr><td>seed=0</td><td>normal</td><td>1.0</td><td>none</td><td>hit=True delay=None</td><td>FA/h=0.0</td></tr><tr><td>seed=0</td><td>packoff</td><td>0.9242</td><td>possible_packoff</td><td>hit=True delay=31.0</td><td>FA/h=0.0</td></tr><tr><td>seed=0</td><td>lost_circulation</td><td>0.9163</td><td>possible_lost_circulation</td><td>hit=True delay=34.0</td><td>FA/h=0.0</td></tr><tr><td>seed=0</td><td>influx</td><td>0.9</td><td>possible_influx</td><td>hit=True delay=40.0</td><td>FA/h=0.0</td></tr><tr><td>seed=0</td><td>torque</td><td>0.9398</td><td>torque_drag_anomaly</td><td>hit=True delay=25.0</td><td>FA/h=0.0</td></tr><tr><td>seed=0</td><td>connection</td><td>0.0482</td><td>operation_change</td><td>hit=True delay=0.0</td><td>FA/h=0.0</td></tr><tr><td>seed=0</td><td>sensor_fault_flatline</td><td>0.9398</td><td>sensor_quality_issue</td><td>hit=True delay=15.0</td><td>FA/h=0.0</td></tr><tr><td>seed=0</td><td>short_transient_only</td><td>0.5</td><td>short_transient</td><td>hit=True delay=2.0</td><td>FA/h=0.0</td></tr><tr><td>seed=0</td><td>high_noise</td><td>1.0</td><td>none</td><td>hit=True delay=None</td><td>FA/h=0.0</td></tr><tr><td>seed=1</td><td>normal</td><td>1.0</td><td>none</td><td>hit=True delay=None</td><td>FA/h=0.0</td></tr><tr><td>seed=1</td><td>packoff</td><td>0.9346</td><td>possible_packoff</td><td>hit=True delay=27.0</td><td>FA/h=0.0</td></tr><tr><td>seed=1</td><td>lost_circulation</td><td>0.9398</td><td>possible_lost_circulation</td><td>hit=True delay=25.0</td><td>FA/h=0.0</td></tr><tr><td>seed=1</td><td>influx</td><td>0.9216</td><td>possible_influx</td><td>hit=True delay=32.0</td><td>FA/h=0.0</td></tr><tr><td>seed=1</td><td>torque</td><td>0.9474</td><td>torque_drag_anomaly</td><td>hit=True delay=22.0</td><td>FA/h=0.0</td></tr><tr><td>seed=1</td><td>connection</td><td>0.0482</td><td>operation_change</td><td>hit=True delay=0.0</td><td>FA/h=0.0</td></tr><tr><td>seed=1</td><td>sensor_fault_flatline</td><td>0.9398</td><td>sensor_quality_issue</td><td>hit=True delay=15.0</td><td>FA/h=0.0</td></tr><tr><td>seed=1</td><td>short_transient_only</td><td>0.5</td><td>short_transient</td><td>hit=True delay=2.0</td><td>FA/h=0.0</td></tr><tr><td>seed=1</td><td>high_noise</td><td>1.0</td><td>none</td><td>hit=True delay=None</td><td>FA/h=0.0</td></tr><tr><td>seed=2</td><td>normal</td><td>1.0</td><td>none</td><td>hit=True delay=None</td><td>FA/h=0.0</td></tr><tr><td>seed=2</td><td>packoff</td><td>0.9474</td><td>possible_packoff</td><td>hit=True delay=22.0</td><td>FA/h=0.0</td></tr><tr><td>seed=2</td><td>lost_circulation</td><td>0.9346</td><td>possible_lost_circulation</td><td>hit=True delay=27.0</td><td>FA/h=0.0</td></tr><tr><td>seed=2</td><td>influx</td><td>0.9216</td><td>possible_influx</td><td>hit=True delay=32.0</td><td>FA/h=0.0</td></tr><tr><td>seed=2</td><td>torque</td><td>0.9499</td><td>torque_drag_anomaly</td><td>hit=True delay=21.0</td><td>FA/h=0.0</td></tr><tr><td>seed=2</td><td>connection</td><td>0.0482</td><td>operation_change</td><td>hit=True delay=0.0</td><td>FA/h=0.0</td></tr><tr><td>seed=2</td><td>sensor_fault_flatline</td><td>0.9398</td><td>sensor_quality_issue</td><td>hit=True delay=15.0</td><td>FA/h=0.0</td></tr><tr><td>seed=2</td><td>short_transient_only</td><td>0.5</td><td>short_transient</td><td>hit=True delay=2.0</td><td>FA/h=0.0</td></tr><tr><td>seed=2</td><td>high_noise</td><td>1.0</td><td>none</td><td>hit=True delay=None</td><td>FA/h=0.0</td></tr><tr><td>seed=3</td><td>normal</td><td>1.0</td><td>none</td><td>hit=True delay=None</td><td>FA/h=0.0</td></tr><tr><td>seed=3</td><td>packoff</td><td>0.9398</td><td>possible_packoff</td><td>hit=True delay=25.0</td><td>FA/h=0.0</td></tr><tr><td>seed=3</td><td>lost_circulation</td><td>0.9372</td><td>possible_lost_circulation</td><td>hit=True delay=26.0</td><td>FA/h=0.0</td></tr><tr><td>seed=3</td><td>influx</td><td>0.9082</td><td>possible_influx</td><td>hit=True delay=37.0</td><td>FA/h=0.0</td></tr><tr><td>seed=3</td><td>torque</td><td>0.9448</td><td>torque_drag_anomaly</td><td>hit=True delay=23.0</td><td>FA/h=0.0</td></tr><tr><td>seed=3</td><td>connection</td><td>0.0482</td><td>operation_change</td><td>hit=True delay=0.0</td><td>FA/h=0.0</td></tr><tr><td>seed=3</td><td>sensor_fault_flatline</td><td>0.9398</td><td>sensor_quality_issue</td><td>hit=True delay=15.0</td><td>FA/h=0.0</td></tr><tr><td>seed=3</td><td>short_transient_only</td><td>0.5</td><td>short_transient</td><td>hit=True delay=2.0</td><td>FA/h=0.0</td></tr><tr><td>seed=3</td><td>high_noise</td><td>1.0</td><td>none</td><td>hit=True delay=None</td><td>FA/h=0.0</td></tr><tr><td>seed=4</td><td>normal</td><td>1.0</td><td>none</td><td>hit=True delay=None</td><td>FA/h=0.0</td></tr><tr><td>seed=4</td><td>packoff</td><td>0.9448</td><td>possible_packoff</td><td>hit=True delay=23.0</td><td>FA/h=0.0</td></tr><tr><td>seed=4</td><td>lost_circulation</td><td>0.9423</td><td>possible_lost_circulation</td><td>hit=True delay=24.0</td><td>FA/h=0.0</td></tr><tr><td>seed=4</td><td>influx</td><td>0.9109</td><td>possible_influx</td><td>hit=True delay=36.0</td><td>FA/h=0.0</td></tr><tr><td>seed=4</td><td>torque</td><td>0.9524</td><td>torque_drag_anomaly</td><td>hit=True delay=20.0</td><td>FA/h=0.0</td></tr><tr><td>seed=4</td><td>connection</td><td>0.0482</td><td>operation_change</td><td>hit=True delay=0.0</td><td>FA/h=0.0</td></tr><tr><td>seed=4</td><td>sensor_fault_flatline</td><td>0.9398</td><td>sensor_quality_issue</td><td>hit=True delay=15.0</td><td>FA/h=0.0</td></tr><tr><td>seed=4</td><td>short_transient_only</td><td>0.5</td><td>short_transient</td><td>hit=True delay=2.0</td><td>FA/h=0.0</td></tr><tr><td>seed=4</td><td>high_noise</td><td>1.0</td><td>none</td><td>hit=True delay=None</td><td>FA/h=0.0</td></tr>
+</tbody></table>
+</body></html>

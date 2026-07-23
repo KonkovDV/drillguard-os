@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8"/>
+<title>DrillGuard OS report</title>
+<style>
+body{font-family:Segoe UI,Arial,sans-serif;margin:24px;color:#122}
+.banner{background:#fff3cd;border:1px solid #856404;padding:12px;margin-bottom:16px}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #ccc;padding:6px;font-size:13px;vertical-align:top}
+th{background:#f4f4f4;text-align:left}
+.meta{color:#555;font-size:13px}
+</style></head><body>
+<div class="banner"><strong>Только рекомендация. Система не управляет буровой, не пишет в АСУ ТП/SCADA и не является противоаварийной защитой.</strong></div>
+<h1>DrillGuard OS — event cards</h1>
+<p class="meta">version=0.2.0
+ | origin=synthetic
+ | source=synthetic:packoff
+ | score=heuristic_score is NOT a calibrated probability</p>
+<pre>{
+  &quot;latest_event&quot;: &quot;possible_packoff&quot;,
+  &quot;latest_heuristic_score&quot;: 0.8,
+  &quot;latest_action&quot;: &quot;Проверить циркуляцию, содержание шлама и признаки ухудшения очистки ствола (только проверка; без автоматических команд).&quot;,
+  &quot;rows&quot;: 400,
+  &quot;quality_ok_pct&quot;: 100.0,
+  &quot;event_counts&quot;: {
+    &quot;possible_packoff&quot;: 189,
+    &quot;none&quot;: 168,
+    &quot;insufficient_history&quot;: 25,
+    &quot;normal_noise&quot;: 17,
+    &quot;short_transient&quot;: 1
+  },
+  &quot;algorithm_version&quot;: &quot;0.2.0&quot;,
+  &quot;score_semantics&quot;: &quot;heuristic_score_not_probability&quot;
+}</pre>
+<table>
+<thead><tr><th>Start</th><th>Class</th><th>Score</th><th>Regime</th><th>Check</th><th>Unknowns</th></tr></thead>
+<tbody>
+<tr><td>2026-01-01 00:03:12</td><td>short_transient</td><td>0.15</td><td>drilling</td><td>Короткий выброс; наблюдать без эскалации.</td><td>Полевая точность не подтверждена.</td></tr><tr><td>2026-01-01 00:03:31</td><td>possible_packoff</td><td>0.8</td><td>drilling</td><td>Проверить циркуляцию, содержание шлама и признаки ухудшения очистки ствола (только проверка; без автоматических команд).</td><td>Не модель шламовой пробки; эмпирический гидравлический экран.</td></tr>
+</tbody></table>
+</body></html>

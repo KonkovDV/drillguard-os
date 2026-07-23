@@ -1,0 +1,41 @@
+{
+  "claim_level": "synthetic_adversarial_probes",
+  "probes": [
+    {
+      "name": "baseline_causality_packoff",
+      "history_ok_at_mid": true,
+      "has_baseline_col": true,
+      "pass": true
+    },
+    {
+      "name": "no_shuffle_validation_policy",
+      "policy": "Temporal holdout only; random shuffle of time series is forbidden for quality claims.",
+      "pass": true
+    },
+    {
+      "name": "negative_flow_quality_gate",
+      "quality_ok_any": false,
+      "sensor_or_conflict": true,
+      "pass": true
+    },
+    {
+      "name": "normal_complication_rows",
+      "per_seed": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "max": 0,
+      "pass": true
+    },
+    {
+      "name": "ballooning_like_may_look_like_influx",
+      "latest": "possible_influx",
+      "note": "Hypothesis: without pit/flow-out, ballooning can be misread as influx. Requires field validation.",
+      "pass": true
+    }
+  ],
+  "all_hard_gates_pass": true
+}

@@ -1,0 +1,111 @@
+{
+  "algorithm_version": "0.2.0",
+  "scenario": "packoff",
+  "data_origin": "synthetic",
+  "source_id": "synthetic:packoff:seed=0",
+  "advisory_banner": "Только рекомендация. Система не управляет буровой, не пишет в АСУ ТП/SCADA и не является противоаварийной защитой.",
+  "score_semantics": "heuristic_score is NOT a calibrated probability",
+  "summary": {
+    "latest_event": "possible_packoff",
+    "latest_heuristic_score": 0.8,
+    "latest_action": "Проверить циркуляцию, содержание шлама и признаки ухудшения очистки ствола (только проверка; без автоматических команд).",
+    "rows": 400,
+    "quality_ok_pct": 100.0,
+    "event_counts": {
+      "possible_packoff": 189,
+      "none": 168,
+      "insufficient_history": 25,
+      "normal_noise": 17,
+      "short_transient": 1
+    },
+    "algorithm_version": "0.2.0",
+    "score_semantics": "heuristic_score_not_probability"
+  },
+  "event_cards": [
+    {
+      "event_class": "short_transient",
+      "start_time": "2026-01-01 00:03:12",
+      "confirm_time": "2026-01-01 00:03:12",
+      "end_time": "2026-01-01 00:03:12",
+      "duration_s": 1.0,
+      "depth_m": 3004.812030075188,
+      "regime": "drilling",
+      "heuristic_score": 0.15,
+      "score_semantics": "heuristic_rule_weight_not_calibrated_probability",
+      "data_quality_ok_pct": 100.0,
+      "contributing_features": "soft_deviation spp_z=5.82 flow_z=0.45",
+      "baseline_interval": {
+        "window_points": 60,
+        "min_history": 25,
+        "history_ok": true,
+        "note": "Causal past-only baseline within regime; frozen while candidate active."
+      },
+      "observed_deviation": {
+        "standpipe_pressure_kpa_z": 5.8237,
+        "pump_flow_lpm_z": 0.4527,
+        "torque_drag_index": 1.9814,
+        "pressure_per_flow_z": 1.6128
+      },
+      "recommended_check": "Короткий выброс; наблюдать без эскалации.",
+      "unknowns": "Полевая точность не подтверждена.",
+      "data_origin": "synthetic",
+      "algorithm_version": "0.2.0",
+      "source_id": "synthetic:packoff:seed=0",
+      "advisory_only": true,
+      "no_control_actions": true
+    },
+    {
+      "event_class": "possible_packoff",
+      "start_time": "2026-01-01 00:03:31",
+      "confirm_time": "2026-01-01 00:03:31",
+      "end_time": "2026-01-01 00:06:39",
+      "duration_s": 188.0,
+      "depth_m": 3005.2882205513783,
+      "regime": "drilling",
+      "heuristic_score": 0.8,
+      "score_semantics": "heuristic_rule_weight_not_calibrated_probability",
+      "data_quality_ok_pct": 100.0,
+      "contributing_features": "spp_z=57.01;flow_z=14.71;spp_q_z=5.41",
+      "baseline_interval": {
+        "window_points": 60,
+        "min_history": 25,
+        "history_ok": true,
+        "note": "Causal past-only baseline within regime; frozen while candidate active."
+      },
+      "observed_deviation": {
+        "standpipe_pressure_kpa_z": 12.2956,
+        "pump_flow_lpm_z": 3.4212,
+        "torque_drag_index": 4.8223,
+        "pressure_per_flow_z": 0.9474
+      },
+      "recommended_check": "Проверить циркуляцию, содержание шлама и признаки ухудшения очистки ствола (только проверка; без автоматических команд).",
+      "unknowns": "Не модель шламовой пробки; эмпирический гидравлический экран.",
+      "data_origin": "synthetic",
+      "algorithm_version": "0.2.0",
+      "source_id": "synthetic:packoff:seed=0",
+      "advisory_only": true,
+      "no_control_actions": true
+    }
+  ],
+  "physics_disclaimer": "Not a full hydraulics / T&D model.",
+  "ground_truth": {
+    "scenario": "packoff",
+    "synthetic": true,
+    "seed": 0,
+    "n": 400,
+    "freq": "1s",
+    "noise_scale": 1.0,
+    "intensity": 1.0,
+    "event_class": "possible_packoff",
+    "event_start_idx": 180,
+    "event_end_idx": 399,
+    "channels_affected": [
+      "standpipe_pressure_kpa",
+      "pump_flow_lpm",
+      "torque_knm"
+    ],
+    "regime": "drilling",
+    "requires_field_validation": true,
+    "claim_level": "synthetic_only"
+  }
+}

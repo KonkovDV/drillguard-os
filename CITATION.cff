@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+title: DrillGuard OS
+version: 0.2.0
+date-released: 2026-07-23
+authors:
+  - family-names: Konkov
+    given-names: Dmitry
+license: Apache-2.0
+message: If you use this software, please cite it.
+repository-code: https://github.com/KonkovDV/drillguard-os
+abstract: >-
+  Local advisory demonstrator for screening candidate drilling complications
+  from hydraulic and mechanical signals. Synthetic MVP; not a protection system
+  and not a claim of field accuracy.

@@ -1,0 +1,25 @@
+name: ci
+on:
+  push:
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install
+        run: pip install -e ".[dev]"
+      - name: Ruff
+        run: ruff check drillguard tests benchmark
+      - name: Pytest
+        run: pytest --cov=drillguard --cov-report=term-missing
+      - name: Benchmark (synthetic)
+        run: python -m benchmark.run_benchmark --output artifacts/benchmark_results.json
+      - name: Redteam probes
+        run: python -m benchmark.run_redteam --output artifacts/redteam_results.json
