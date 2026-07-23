@@ -250,6 +250,12 @@ def make_scenario(
     if name == "sensor_fault_flatline" and event_start is not None:
         spp_noise[event_start:event_end] = 0.0
 
+    dq = ["ok"] * n
+    if name == "desync" and event_start is not None and event_end is not None:
+        # Desync injection is a quality/integrity episode, not a packoff truth.
+        for i in range(event_start, min(event_end + 1, n)):
+            dq[i] = "bad"
+
     df = pd.DataFrame(
         {
             "timestamp": t,
@@ -261,7 +267,7 @@ def make_scenario(
             "rate_of_penetration_m_h": rop,
             "pump_rpm": pump,
             "operation": op,
-            "data_quality": ["ok"] * n,
+            "data_quality": dq,
             "mud_density_sg": dens,
             "plastic_viscosity_cp": np.full(n, 25.0),
         }

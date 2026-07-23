@@ -191,8 +191,8 @@ def detect(df: pd.DataFrame, cfg: DetectorConfig | None = None) -> pd.DataFrame:
 
         if proposed == EventClass.SENSOR_QUALITY_ISSUE.value:
             label, phase = proposed, "QUALITY_BLOCKED"
-            state = PersistenceState(cooldown_remaining_s=state.cooldown_remaining_s)
-            active_event_id = None
+            # Preserve FSM across brief quality holes so confirmed events do not fragment.
+            # (Do not hard-reset PersistenceState / active_event_id here.)
         elif proposed == EventClass.OPERATION_CHANGE.value:
             label, phase = proposed, "REGIME_TRANSITION"
             state = PersistenceState(cooldown_remaining_s=state.cooldown_remaining_s)

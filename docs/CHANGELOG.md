@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.2 — 2026-07-24 (red-team pass 2, counts unchanged)
+
+- CLI `dashboard` subcommand; `python -m drillguard.api` starts local uvicorn.
+- Preserve persistence across quality holes; shared `ALLOWED_DATA_ORIGINS` for CLI/API.
+- Desync: latch + quality flag window (no packoff FA); gates from case fields; confirm_time assert.
+- Emit `flatline`; document FA/h as row-rate; release_manifest lists dashboards.
+
 ## 0.2.2 — 2026-07-24 (red-team hardening, counts unchanged)
 
 - Fixed negative TN (`~` on int masks), ballooning confound scoring, confirm_time CONFIRMED match.

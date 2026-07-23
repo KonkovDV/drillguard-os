@@ -152,7 +152,7 @@ def probe_html_escape(tmp: Path) -> dict:
     html = write_html(rep, tmp / "xss.html").read_text(encoding="utf-8")
     return {
         "name": "html_escapes_dynamic",
-        "pass": "<script>" not in html or "synthetic&lt;script&gt;" in html,
+        "pass": "synthetic&lt;script&gt;" in html and "x&lt;y&gt;" in html and "<script>" not in html,
         "hard": True,
     }
 
@@ -176,9 +176,19 @@ def probe_no_network_side_effect_marker() -> dict:
         app = create_app()
         # call health via dependency-free check on description + route presence
         routes = [r.path for r in app.routes]
-        ok = "/health" in routes and "control" in app.description.lower()
-    except Exception:
-        ok = True  # API optional
+        ok = (
+            "/health" in routes
+            and "No SCADA" in app.description
+            and "control" in app.description.lower()
+        )
+    except Exception as exc:
+        ok = False
+        return {
+            "name": "api_declares_no_control_or_optional",
+            "pass": ok,
+            "hard": False,
+            "note": f"API optional / unavailable: {type(exc).__name__}",
+        }
     return {"name": "api_declares_no_control_or_optional", "pass": ok, "hard": False}
 
 

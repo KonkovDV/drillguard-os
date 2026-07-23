@@ -91,6 +91,14 @@ QUALITY_REASON_CODES = [
 
 NUMERIC_REQUIRED = REQUIRED_COLUMNS[1:8]
 GOOD_QUALITY_TOKENS = frozenset({"ok", "good", "1", "true", "yes"})
+ALLOWED_DATA_ORIGINS = frozenset(
+    {
+        "synthetic",
+        "field_unvalidated",
+        "archive_unvalidated",
+        "shadow_mode",
+    }
+)
 
 
 class EventClass(str, Enum):

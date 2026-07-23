@@ -42,15 +42,22 @@ def prepare_timebase(df: pd.DataFrame) -> pd.DataFrame:
         (dt < 0.25 * median_dt) | (dt > 2.0 * median_dt)
     ) & dt.notna()
 
-    # Channel sync proxy: large simultaneous jumps across channels (heuristic)
+    # Channel sync proxy: extreme SPP jump while flow stays quiet (no gap required).
+    # Latch forward so a one-sample spike cannot immediately become packoff.
     analysis["channel_desync_suspect"] = False
     if len(analysis) > 2:
         p = analysis["standpipe_pressure_kpa"].diff().abs()
         f = analysis["pump_flow_lpm"].diff().abs()
-        # Extreme opposite moves without shared timing context
-        analysis["channel_desync_suspect"] = (
-            (p > p.median() * 20 + 500) & (f < f.median() * 2 + 5) & analysis["gap_flag"]
-        )
+        hit = ((p > p.median() * 20 + 500) & (f < f.median() * 2 + 5)).fillna(False)
+        latched = np.zeros(len(analysis), dtype=bool)
+        remain = 0
+        for i, flag in enumerate(hit.to_numpy()):
+            if flag:
+                remain = max(remain, 15)
+            if remain > 0:
+                latched[i] = True
+                remain -= 1
+        analysis["channel_desync_suspect"] = latched
 
     analysis.attrs.update(out.attrs)
     analysis.attrs["dropped_duplicate_rows"] = int((~keep).sum())

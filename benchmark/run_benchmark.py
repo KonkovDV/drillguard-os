@@ -77,16 +77,21 @@ def run(
         "possible_influx_candidate is not well-control diagnosis. "
         "Requires labeled archive + temporal holdout for any field claim."
     )
-    # Hard gates — computed from report contents (not hardcoded True literals).
+    # Hard gates — computed from case/aggregate fields (not only banner self-check).
     gates = {
         "normal_zero_complication_fa": bool(
             aggregate.get("normal_scenario_gate", {}).get("all_zero_complication_fa")
         ),
-        "heuristic_score_not_probability": "not a probability" in limitations.lower(),
-        "synthetic_only": all(c.get("claim_level") == "synthetic_only" for c in cases),
+        "heuristic_score_not_probability": all(
+            str(c.get("score_semantics", "")).endswith("not_probability")
+            or "not_probability" in str(c.get("score_semantics", ""))
+            for c in cases
+        ),
+        "synthetic_only": all(c.get("claim_level") == "synthetic_only" for c in cases)
+        and all(c.get("requires_field_validation") is True for c in cases),
         "event_appearance_rate_is_not_primary": (
-            "demoted" in limitations.lower()
-            or "do not advertise" in str(aggregate.get("primary_metrics_note", "")).lower()
+            "compat_appearance_rate_demoted" in aggregate
+            and "compat" in str(aggregate.get("primary_metrics_note", "")).lower()
         ),
     }
     report = {

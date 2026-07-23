@@ -101,6 +101,7 @@ def false_alarm_complication_stats(out: pd.DataFrame, gt: dict[str, Any]) -> dic
     return {
         "false_alarm_rows": int(fa.sum()),
         "false_alarms_per_hour": float(fa.sum()) / hours,
+        "false_alarms_per_hour_definition": "level_a_false_alarm_rows_per_hour",
         "false_alarm_events": len(durations),
         "mean_false_alarm_duration_s": float(np.mean(durations)) if durations else 0.0,
         "false_alarm_durations_s": durations,
@@ -264,6 +265,7 @@ def evaluate_case(out: pd.DataFrame, gt: dict[str, Any]) -> dict[str, Any]:
         "synthetic": True,
         "claim_level": "synthetic_only",
         "requires_field_validation": True,
+        "score_semantics": out.attrs.get("score_semantics", "heuristic_score_not_probability"),
         "truth_class": truth,
         "level_a": level_a,
         "level_b": level_b,

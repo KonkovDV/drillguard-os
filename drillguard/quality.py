@@ -85,7 +85,7 @@ def add_quality_flags(df: pd.DataFrame) -> pd.DataFrame:
         if np.all(np.isfinite(seg)) and float(np.nanstd(seg)) < 1e-6:
             stuck[i] = True
             if quality_ok[i] and reasons[i] == "ok":
-                reasons[i] = "stale_channel"
+                reasons[i] = "flatline"
                 quality_ok[i] = False
 
     out["quality_ok"] = quality_ok

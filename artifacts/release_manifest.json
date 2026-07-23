@@ -21,6 +21,8 @@
     "artifacts/redteam_results.json",
     "artifacts/demo_report.json",
     "artifacts/demo_report.html",
+    "artifacts/dashboard.html",
+    "artifacts/dashboard_cards.html",
     "artifacts/schema_example.csv"
   ]
 }

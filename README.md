@@ -261,12 +261,15 @@ python -m benchmark.run_redteam
 Опционально:
 
 ```bash
-# API (read-only screen)
+# API (read-only screen on localhost)
 pip install -e ".[api]"
 python -m drillguard.api
+# → http://127.0.0.1:8000/health  and  POST /screen
 
 # Dashboard HTML
 pip install -e ".[dashboard]"
+python -m drillguard.cli dashboard --scenario packoff --html artifacts/dashboard.html
+# or from CSV:
 python -m drillguard.cli dashboard --csv path/to/series.csv --html artifacts/dashboard.html
 ```
 

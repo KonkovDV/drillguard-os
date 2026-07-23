@@ -76,6 +76,6 @@ def add_features(df: pd.DataFrame, cfg: BaselineConfig | None = None) -> pd.Data
     out.attrs["feature_catalog"] = FEATURE_CATALOG
     out.attrs["physics_disclaimer"] = (
         "Features are observed or physically motivated screens. "
-        "v0.2 does not implement multiphase hydraulics, rheology, ECD, or full T&D physics."
+        "v0.2.x does not implement multiphase hydraulics, rheology, ECD, or full T&D physics."
     )
     return out

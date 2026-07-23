@@ -32,7 +32,7 @@
 - Out of soft range → `out_of_range:`
 - Duplicate timestamps → dropped (keep first), flagged
 - Gaps > 3× median Δt → `gap_in_timeline`
-- Flatline SPP ≥ 16 samples → `stale_channel`
+- Flatline SPP ≥ 16 samples → `flatline` (legacy alias noted as `stale_channel` in older notes)
 
 ## Example validation error
 
