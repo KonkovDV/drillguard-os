@@ -1,29 +1,24 @@
 {
   "name": "drillguard-os",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "claim_level": "synthetic_only",
   "requires_field_validation": true,
   "license": "Apache-2.0",
+  "evidence_ssot": "artifacts/CLAIMS_MANIFEST.json",
+  "expected": {
+    "benchmark_cases": 50,
+    "core_scenarios": 10,
+    "seeds": 5,
+    "redteam_probes": 12,
+    "redteam_hard_gates": 11
+  },
   "artifacts": [
+    "artifacts/CLAIMS_MANIFEST.json",
     "artifacts/benchmark_results.json",
     "artifacts/benchmark_results.html",
     "artifacts/redteam_results.json",
     "artifacts/demo_report.json",
     "artifacts/demo_report.html",
-    "artifacts/schema_example.csv",
-    "docs/AUDIT_2026_07_23.md",
-    "RELEASE_NOTES_v0.2.1.md"
-  ],
-  "primary_kpis": [
-    "level_a_f1_precision_recall",
-    "detection_delay_s",
-    "false_alarms_per_hour",
-    "normal_scenario_gate",
-    "operation_change_interval_hit",
-    "short_transient_no_escalation"
-  ],
-  "demoted_metrics": [
-    "compat_appearance_rate",
-    "compat_latest_match"
+    "artifacts/schema_example.csv"
   ]
 }

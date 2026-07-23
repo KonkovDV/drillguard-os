@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.2 — 2026-07-23
+
+- CLAIMS_MANIFEST + artifact consistency tests (P0 evidence sync).
+- Baseline pass-2 applies `candidate_mask` when `freeze_on_candidate=True`.
+- Ballooning hard gate exposes `well_control_overclaim`.
+- Display label: «Кандидат на поведение, похожее на проявление».
+- Regenerated benchmark/redteam artifacts stamped to 0.2.2.
+
 ## 0.2.1 — 2026-07-23
 
 - Benchmark Level A/B/C; demote appearance-rate KPI; HTML leads with limitations.

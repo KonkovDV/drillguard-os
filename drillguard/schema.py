@@ -5,7 +5,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Any
 
-ALGORITHM_VERSION = "0.2.1"
+ALGORITHM_VERSION = "0.2.2"
 
 REQUIRED_COLUMNS = [
     "timestamp",

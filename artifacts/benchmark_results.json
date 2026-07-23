@@ -1,5 +1,5 @@
 {
-  "algorithm_version": "0.2.1",
+  "algorithm_version": "0.2.2",
   "limitations_banner": "SYNTHETIC ONLY. Not field accuracy. event appearance rate is demoted and must not be used as the headline KPI. possible_influx_candidate is not well-control diagnosis. Requires labeled archive + temporal holdout for any field claim.",
   "claim_level": "synthetic_only",
   "requires_field_validation": true,
@@ -76,16 +76,16 @@
       "truth_class": "possible_packoff",
       "level_a": {
         "precision": 1.0,
-        "recall": 0.8591,
-        "f1": 0.9242,
-        "tp": 189,
+        "recall": 0.8682,
+        "f1": 0.9294,
+        "tp": 191,
         "fp": 0,
-        "fn": 31,
+        "fn": 29,
         "tn": 180,
         "class": "possible_packoff",
         "event_detected_in_window": true,
         "latest_is_truth": true,
-        "detection_delay_s": 31.0,
+        "detection_delay_s": 29.0,
         "event_fragments": 1,
         "time_to_clear_s": 0.0,
         "other_level_a_in_window_rows": 0
@@ -488,16 +488,16 @@
       "truth_class": "possible_packoff",
       "level_a": {
         "precision": 1.0,
-        "recall": 0.8773,
-        "f1": 0.9346,
-        "tp": 193,
+        "recall": 0.9,
+        "f1": 0.9474,
+        "tp": 198,
         "fp": 0,
-        "fn": 27,
+        "fn": 22,
         "tn": 180,
         "class": "possible_packoff",
         "event_detected_in_window": true,
         "latest_is_truth": true,
-        "detection_delay_s": 27.0,
+        "detection_delay_s": 22.0,
         "event_fragments": 1,
         "time_to_clear_s": 0.0,
         "other_level_a_in_window_rows": 0
@@ -618,9 +618,9 @@
         "recall": 0.0,
         "f1": 0.0,
         "tp": 0,
-        "fp": 87,
+        "fp": 102,
         "fn": 0,
-        "tn": -487,
+        "tn": -502,
         "class": "none",
         "event_detected_in_window": false,
         "latest_is_truth": false,
@@ -640,12 +640,12 @@
         "warmup_rows": 25,
         "latest_event": "possible_influx_candidate",
         "stable_terminal_not_required_for_operation_change": false,
-        "false_alarm_rows": 87,
-        "false_alarms_per_hour": 784.9624060150376,
+        "false_alarm_rows": 102,
+        "false_alarms_per_hour": 920.3007518796992,
         "false_alarm_events": 1,
-        "mean_false_alarm_duration_s": 86.0,
+        "mean_false_alarm_duration_s": 101.0,
         "false_alarm_durations_s": [
-          86.0
+          101.0
         ]
       },
       "compat_event_appeared": false,
@@ -900,16 +900,16 @@
       "truth_class": "possible_packoff",
       "level_a": {
         "precision": 1.0,
-        "recall": 0.9,
-        "f1": 0.9474,
-        "tp": 198,
+        "recall": 0.9136,
+        "f1": 0.9549,
+        "tp": 201,
         "fp": 0,
-        "fn": 22,
+        "fn": 19,
         "tn": 180,
         "class": "possible_packoff",
         "event_detected_in_window": true,
         "latest_is_truth": true,
-        "detection_delay_s": 22.0,
+        "detection_delay_s": 19.0,
         "event_fragments": 1,
         "time_to_clear_s": 0.0,
         "other_level_a_in_window_rows": 0
@@ -1030,9 +1030,9 @@
         "recall": 0.0,
         "f1": 0.0,
         "tp": 0,
-        "fp": 101,
+        "fp": 107,
         "fn": 0,
-        "tn": -501,
+        "tn": -507,
         "class": "none",
         "event_detected_in_window": false,
         "latest_is_truth": false,
@@ -1052,12 +1052,12 @@
         "warmup_rows": 25,
         "latest_event": "possible_influx_candidate",
         "stable_terminal_not_required_for_operation_change": false,
-        "false_alarm_rows": 101,
-        "false_alarms_per_hour": 911.2781954887217,
+        "false_alarm_rows": 107,
+        "false_alarms_per_hour": 965.4135338345864,
         "false_alarm_events": 1,
-        "mean_false_alarm_duration_s": 100.0,
+        "mean_false_alarm_duration_s": 106.0,
         "false_alarm_durations_s": [
-          100.0
+          106.0
         ]
       },
       "compat_event_appeared": false,
@@ -1442,9 +1442,9 @@
         "recall": 0.0,
         "f1": 0.0,
         "tp": 0,
-        "fp": 94,
+        "fp": 100,
         "fn": 0,
-        "tn": -494,
+        "tn": -500,
         "class": "none",
         "event_detected_in_window": false,
         "latest_is_truth": false,
@@ -1464,12 +1464,12 @@
         "warmup_rows": 25,
         "latest_event": "possible_influx_candidate",
         "stable_terminal_not_required_for_operation_change": false,
-        "false_alarm_rows": 94,
-        "false_alarms_per_hour": 848.1203007518797,
+        "false_alarm_rows": 100,
+        "false_alarms_per_hour": 902.2556390977443,
         "false_alarm_events": 1,
-        "mean_false_alarm_duration_s": 93.0,
+        "mean_false_alarm_duration_s": 99.0,
         "false_alarm_durations_s": [
-          93.0
+          99.0
         ]
       },
       "compat_event_appeared": false,
@@ -1854,9 +1854,9 @@
         "recall": 0.0,
         "f1": 0.0,
         "tp": 0,
-        "fp": 84,
+        "fp": 104,
         "fn": 0,
-        "tn": -484,
+        "tn": -504,
         "class": "none",
         "event_detected_in_window": false,
         "latest_is_truth": false,
@@ -1876,12 +1876,12 @@
         "warmup_rows": 25,
         "latest_event": "possible_influx_candidate",
         "stable_terminal_not_required_for_operation_change": false,
-        "false_alarm_rows": 84,
-        "false_alarms_per_hour": 757.8947368421052,
+        "false_alarm_rows": 104,
+        "false_alarms_per_hour": 938.3458646616541,
         "false_alarm_events": 1,
-        "mean_false_alarm_duration_s": 83.0,
+        "mean_false_alarm_duration_s": 103.0,
         "false_alarm_durations_s": [
-          83.0
+          103.0
         ]
       },
       "compat_event_appeared": false,
@@ -2121,18 +2121,18 @@
       "possible_packoff": {
         "n": 5,
         "f1": {
-          "mean": 0.9381600000000001,
-          "min": 0.9242,
-          "median": 0.9398,
-          "max": 0.9474,
-          "p05": 0.92628,
-          "p95": 0.94688
+          "mean": 0.9432600000000001,
+          "min": 0.9294,
+          "median": 0.9448,
+          "max": 0.9549,
+          "p05": 0.93148,
+          "p95": 0.9534
         },
         "detection_delay_s": {
-          "mean": 25.6,
-          "min": 22.0,
-          "median": 25.0,
-          "max": 31.0
+          "mean": 23.6,
+          "min": 19.0,
+          "median": 23.0,
+          "max": 29.0
         },
         "false_alarms_per_hour": {
           "mean": 0.0,
@@ -2213,10 +2213,10 @@
           "max": null
         },
         "false_alarms_per_hour": {
-          "mean": 833.6842105263158,
-          "min": 757.8947368421052,
-          "median": 848.1203007518797,
-          "max": 911.2781954887217
+          "mean": 918.4962406015038,
+          "min": 866.1654135338346,
+          "median": 920.3007518796992,
+          "max": 965.4135338345864
         },
         "rate_expected_class_appeared": 0.0,
         "rate_latest_equals_truth": 0.0,

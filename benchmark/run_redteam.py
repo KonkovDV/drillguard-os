@@ -96,21 +96,32 @@ def probe_short_transient_no_escalation() -> dict:
 
 def probe_ballooning_not_confirmed_kick() -> dict:
     out = detect(make_scenario("ballooning_like", seed=0)[0])
-    latest = str(out.iloc[-1]["event"])
-    # May look like influx candidate — must not be marketed as confirmed kick
-    cards_ok = True
-    if "possible_influx_candidate" in set(out["event"]):
-        # score must stay lowish and unknowns must mention pit/ballooning
+    events = set(out["event"])
+    # Forbidden: legacy diagnosis name or any implication of confirmed kick
+    forbidden = {"possible_influx", "confirmed_influx", "kick", "manifestation"}
+    overclaim = bool(events & forbidden)
+    # Candidate class may fire; must stay low score and carry warning unknowns
+    if "possible_influx_candidate" in events:
         sub = out[out["event"] == "possible_influx_candidate"]
-        cards_ok = bool((sub["heuristic_score"] <= 0.55).all()) and bool(
-            sub["unknowns"].astype(str).str.contains("pit|ballooning|well-control", case=False).any()
+        overclaim = overclaim or bool((sub["heuristic_score"] > 0.55).any())
+        has_warn = bool(
+            sub["unknowns"]
+            .astype(str)
+            .str.contains("pit|ballooning|well-control|не является", case=False)
+            .any()
         )
+        if not has_warn:
+            overclaim = True
     return {
         "name": "ballooning_like_not_confirmed_manifestation",
-        "latest": latest,
-        "pass": cards_ok and "possible_influx" not in set(out["event"]),
+        "latest": str(out.iloc[-1]["event"]),
+        "well_control_overclaim": overclaim,
+        "pass": not overclaim,
         "hard": True,
-        "note": "Residual: influx-like candidate may still fire; not a confirmed manifestation.",
+        "note": (
+            "Hard gate: ballooning_like must not produce confirmed manifestation / legacy "
+            "possible_influx. possible_influx_candidate may appear with low score + warning."
+        ),
     }
 
 
@@ -198,6 +209,9 @@ def main(output: str = "artifacts/redteam_results.json") -> dict:
         "n_hard_gates": len(hard),
         "probes": probes,
         "all_hard_gates_pass": hard_pass,
+        "well_control_overclaim": any(
+            p.get("well_control_overclaim") for p in probes if "well_control_overclaim" in p
+        ),
     }
     Path(output).parent.mkdir(parents=True, exist_ok=True)
     Path(output).write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")

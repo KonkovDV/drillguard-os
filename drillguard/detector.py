@@ -104,6 +104,21 @@ def _propose(row: pd.Series, cfg: DetectorConfig) -> tuple[str | None, float, li
     return None, 0.05, []
 
 
+DISPLAY_LABELS = {
+    EventClass.POSSIBLE_INFLUX_CANDIDATE.value: (
+        "Кандидат на поведение, похожее на проявление"
+    ),
+    EventClass.POSSIBLE_PACKOFF.value: (
+        "Кандидат на ухудшение очистки ствола / ограничение циркуляции"
+    ),
+    EventClass.POSSIBLE_LOST_CIRCULATION.value: (
+        "Кандидат на поглощение (по доступным сигналам)"
+    ),
+    EventClass.TORQUE_DRAG_ANOMALY.value: (
+        "Упрощённый индекс аномалии момента и нагрузки"
+    ),
+}
+
 ACTIONS = {
     EventClass.POSSIBLE_PACKOFF.value: (
         "Кандидат на ухудшение очистки ствола или ограничение циркуляции. "
@@ -114,8 +129,9 @@ ACTIONS = {
         "Проверить по производственному регламенту; объём поглощения не оценивается."
     ),
     EventClass.POSSIBLE_INFLUX_CANDIDATE.value: (
-        "Influx-like candidate по SPP/flow-in. Это НЕ диагностика проявления / well-control. "
-        "Без pit volume и flow-out вывод неполон; сверить с регламентом заказчика."
+        "Кандидат на поведение, похожее на проявление (не диагностика). "
+        "Сформирован по доступному сочетанию сигналов. Без pit volume, flow-out и экспертной "
+        "проверки это НЕ является диагностикой проявления / well-control."
     ),
     EventClass.TORQUE_DRAG_ANOMALY.value: (
         "Упрощённый индекс аномалии момента и нагрузки (не 4DOF T&D). "
@@ -138,7 +154,7 @@ ACTIONS = {
 UNKNOWNS = {
     EventClass.POSSIBLE_INFLUX_CANDIDATE.value: (
         "Нет обязательных pit volume / flow-out для well-control; возможна путаница с ballooning; "
-        "не ECD; не подтверждённое проявление."
+        "не ECD; это не является диагностикой проявления."
     ),
     EventClass.POSSIBLE_LOST_CIRCULATION.value: (
         "Нет модели ECD/реологии; нет оценки объёма; не подтверждённое поглощение."
@@ -209,6 +225,7 @@ def detect(df: pd.DataFrame, cfg: DetectorConfig | None = None) -> pd.DataFrame:
         rows.append(
             {
                 "event": label,
+                "display_label": DISPLAY_LABELS.get(label, label),
                 "heuristic_score": round(float(score), 3),
                 "rule_score": round(float(score), 3),
                 "screening_score": round(float(score), 3),

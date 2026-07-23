@@ -1,5 +1,5 @@
 {
-  "algorithm_version": "0.2.1",
+  "algorithm_version": "0.2.2",
   "scenario": "packoff",
   "data_origin": "synthetic",
   "source_id": "synthetic:packoff:seed=0",
@@ -12,18 +12,20 @@
     "rows": 400,
     "quality_ok_pct": 100.0,
     "event_counts": {
-      "possible_packoff": 189,
+      "possible_packoff": 191,
       "none": 168,
       "insufficient_history": 25,
-      "normal_noise": 17,
+      "normal_noise": 15,
       "short_transient": 1
     },
-    "algorithm_version": "0.2.1",
+    "algorithm_version": "0.2.2",
     "score_semantics": "heuristic_score_not_probability"
   },
   "event_cards": [
     {
       "event_class": "short_transient",
+      "display_label": "short_transient",
+      "well_control_overclaim": false,
       "start_time": "2026-01-01 00:03:12",
       "confirm_time": "2026-01-01 00:03:12",
       "end_time": "2026-01-01 00:03:12",
@@ -33,7 +35,7 @@
       "heuristic_score": 0.15,
       "score_semantics": "heuristic_rule_weight_not_calibrated_probability",
       "data_quality_ok_pct": 100.0,
-      "contributing_features": "soft_deviation spp_z=5.82 flow_z=0.45",
+      "contributing_features": "soft_deviation spp_z=5.82 flow_z=0.47",
       "baseline_interval": {
         "window_points": 60,
         "min_history": 25,
@@ -42,30 +44,33 @@
       },
       "observed_deviation": {
         "standpipe_pressure_kpa_z": 5.8237,
-        "pump_flow_lpm_z": 0.4527,
-        "torque_drag_index": 1.9814,
+        "pump_flow_lpm_z": 0.4683,
+        "torque_drag_index": 2.0269,
         "pressure_per_flow_z": 1.6128
       },
-      "recommended_check": "Короткий выброс; наблюдать без эскалации.",
       "unknowns": "Полевая точность не подтверждена (requires_field_validation).",
+      "recommended_check": "Короткий выброс; наблюдать без эскалации.",
+      "prominent_warning": null,
       "data_origin": "synthetic",
-      "algorithm_version": "0.2.1",
+      "algorithm_version": "0.2.2",
       "source_id": "synthetic:packoff:seed=0",
       "advisory_only": true,
       "no_control_actions": true
     },
     {
       "event_class": "possible_packoff",
-      "start_time": "2026-01-01 00:03:31",
-      "confirm_time": "2026-01-01 00:03:31",
+      "display_label": "Кандидат на ухудшение очистки ствола / ограничение циркуляции",
+      "well_control_overclaim": false,
+      "start_time": "2026-01-01 00:03:29",
+      "confirm_time": "2026-01-01 00:03:29",
       "end_time": "2026-01-01 00:06:39",
-      "duration_s": 188.0,
-      "depth_m": 3005.2882205513783,
+      "duration_s": 190.0,
+      "depth_m": 3005.2380952380954,
       "regime": "drilling",
       "heuristic_score": 0.8,
       "score_semantics": "heuristic_rule_weight_not_calibrated_probability",
       "data_quality_ok_pct": 100.0,
-      "contributing_features": "spp_z=57.01;flow_z=14.71;spp_q_z=5.41",
+      "contributing_features": "spp_z=57.01;flow_z=14.83;spp_q_z=5.41",
       "baseline_interval": {
         "window_points": 60,
         "min_history": 25,
@@ -73,15 +78,16 @@
         "note": "Causal past-only baseline within regime; frozen while candidate active."
       },
       "observed_deviation": {
-        "standpipe_pressure_kpa_z": 12.2956,
-        "pump_flow_lpm_z": 3.4212,
-        "torque_drag_index": 4.8223,
-        "pressure_per_flow_z": 0.9474
+        "standpipe_pressure_kpa_z": 11.5527,
+        "pump_flow_lpm_z": 1.2762,
+        "torque_drag_index": 4.253,
+        "pressure_per_flow_z": 2.7486
       },
-      "recommended_check": "Кандидат на ухудшение очистки ствола или ограничение циркуляции. Проверить циркуляцию и шлам (только проверка; без автоматических команд).",
       "unknowns": "Не модель шламовой пробки; эмпирический гидравлический экран.",
+      "recommended_check": "Кандидат на ухудшение очистки ствола или ограничение циркуляции. Проверить циркуляцию и шлам (только проверка; без автоматических команд).",
+      "prominent_warning": null,
       "data_origin": "synthetic",
-      "algorithm_version": "0.2.1",
+      "algorithm_version": "0.2.2",
       "source_id": "synthetic:packoff:seed=0",
       "advisory_only": true,
       "no_control_actions": true

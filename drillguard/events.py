@@ -58,6 +58,8 @@ def _card(
     )
     return {
         "event_class": event,
+        "display_label": str(last.get("display_label", event)),
+        "well_control_overclaim": False,
         "start_time": str(first["timestamp"]),
         "confirm_time": confirm_time,
         "end_time": str(last["timestamp"]),
@@ -80,8 +82,14 @@ def _card(
             "torque_drag_index": _f(first.get("torque_drag_index")),
             "pressure_per_flow_z": _f(first.get("pressure_per_flow_z")),
         },
-        "recommended_check": str(last["recommended_action"]),
         "unknowns": str(last["unknowns"]),
+        "recommended_check": str(last["recommended_action"]),
+        "prominent_warning": (
+            "Кандидат сформирован по доступному сочетанию сигналов. "
+            "Без pit volume, flow-out и экспертной проверки это не является диагностикой проявления."
+            if event == EventClass.POSSIBLE_INFLUX_CANDIDATE.value
+            else None
+        ),
         "data_origin": data_origin,
         "algorithm_version": ALGORITHM_VERSION,
         "source_id": source_id,

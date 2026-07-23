@@ -36,3 +36,30 @@ def test_strong_event_does_not_absorb_baseline():
     # Late in event, |z| should remain elevated (baseline frozen after warmup)
     z = out["standpipe_pressure_kpa_z"].iloc[-1]
     assert abs(float(z)) > 3.0
+
+
+def test_candidate_mask_flag_present():
+    df, _ = make_scenario("packoff", seed=0, n=200)
+    out = detect(df)
+    assert "baseline_candidate_mask_applied" in out.columns
+    assert bool(out["baseline_candidate_mask_applied"].iloc[-1]) is True
+
+
+def test_baseline_does_not_track_confirmed_ramp():
+    """During a strong sustained ramp, baseline median must stay near pre-event level."""
+    from drillguard.baseline import BaselineConfig, add_causal_baselines
+    from drillguard.quality import add_quality_flags
+    from drillguard.regimes import add_regimes
+    from drillguard.timebase import prepare_timebase
+    from drillguard.ingestion import validate_frame
+
+    df, gt = make_scenario("packoff", seed=0)
+    frame = add_causal_baselines(
+        add_regimes(add_quality_flags(prepare_timebase(validate_frame(df)))),
+        cfg=BaselineConfig(slow_adapt_alpha=0.05, freeze_on_candidate=True),
+    )
+    a = int(gt["event_start_idx"])
+    pre = float(frame.loc[a - 5, "standpipe_pressure_kpa_baseline"])
+    late = float(frame.loc[len(frame) - 1, "standpipe_pressure_kpa_baseline"])
+    # Must not climb toward the elevated event level
+    assert abs(late - pre) < 200.0

@@ -1,5 +1,5 @@
 {
-  "algorithm_version": "0.2.1",
+  "algorithm_version": "0.2.2",
   "claim_level": "synthetic_adversarial_probes",
   "scope": "local synthetic/robustness gates — not a full OT red-team",
   "n_probes": 12,
@@ -45,9 +45,10 @@
     {
       "name": "ballooning_like_not_confirmed_manifestation",
       "latest": "possible_influx_candidate",
+      "well_control_overclaim": false,
       "pass": true,
       "hard": true,
-      "note": "Residual: influx-like candidate may still fire; not a confirmed manifestation."
+      "note": "Hard gate: ballooning_like must not produce confirmed manifestation / legacy possible_influx. possible_influx_candidate may appear with low score + warning."
     },
     {
       "name": "score_not_probability",
@@ -75,5 +76,6 @@
       "hard": false
     }
   ],
-  "all_hard_gates_pass": true
+  "all_hard_gates_pass": true,
+  "well_control_overclaim": false
 }
