@@ -6,7 +6,6 @@ import base64
 import html
 import io
 from pathlib import Path
-from typing import Any
 
 import pandas as pd
 

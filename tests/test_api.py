@@ -2,8 +2,10 @@ import pytest
 
 pytest.importorskip("fastapi")
 from fastapi.testclient import TestClient
+
 from drillguard.api import create_app
 from drillguard.synthetic import make_scenario
+
 
 def test_health_and_screen(tmp_path):
     app = create_app()

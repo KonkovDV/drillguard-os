@@ -1,9 +1,12 @@
+from pathlib import Path
+
+import pytest
+
 from drillguard.api import create_app
 from drillguard.detector import detect
-from drillguard.ingestion import MAX_FILE_BYTES, IngestionError, load_csv
+from drillguard.ingestion import IngestionError, load_csv
 from drillguard.synthetic import make_scenario
-import pytest
-from pathlib import Path
+
 
 def test_no_control_markers_in_report():
     out = detect(make_scenario("packoff", seed=0)[0])

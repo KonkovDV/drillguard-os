@@ -1,7 +1,8 @@
-import pandas as pd
 import pytest
+
 from drillguard.synthetic import make_scenario
 from drillguard.timebase import prepare_timebase
+
 
 def test_sort_and_dt():
     df, _ = make_scenario("normal", n=40, seed=0)

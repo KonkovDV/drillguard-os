@@ -1,9 +1,9 @@
-from drillguard.detector import detect
 from drillguard.features import FEATURE_CATALOG, add_features
 from drillguard.quality import add_quality_flags
 from drillguard.regimes import add_regimes
 from drillguard.synthetic import make_scenario
 from drillguard.timebase import prepare_timebase
+
 
 def test_feature_kinds_documented():
     assert "torque_drag_index" in FEATURE_CATALOG

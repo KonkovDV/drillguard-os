@@ -2,6 +2,7 @@ from drillguard.detector import detect
 from drillguard.report import build_report, write_html, write_json
 from drillguard.synthetic import make_scenario
 
+
 def test_json_and_html(tmp_path):
     out = detect(make_scenario("packoff", seed=0)[0])
     rep = build_report(out, data_origin="synthetic", source_id="x", scenario="packoff")

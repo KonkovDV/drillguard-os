@@ -2,6 +2,7 @@ from drillguard.detector import detect
 from drillguard.events import build_event_cards, summarize
 from drillguard.synthetic import make_scenario
 
+
 def test_cards_have_required_fields():
     out = detect(make_scenario("packoff", seed=0)[0])
     cards = build_event_cards(out, data_origin="synthetic", source_id="t")

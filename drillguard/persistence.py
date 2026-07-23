@@ -49,7 +49,6 @@ def step_persistence(
             return state, state.active_class, "confirmed"
         state.clear_accum_s += dt
         if state.clear_accum_s >= cfg.clear_seconds:
-            cleared = state.active_class
             state.active_class = None
             state.active_accum_s = 0.0
             state.clear_accum_s = 0.0

@@ -1,8 +1,10 @@
 from pathlib import Path
-import pandas as pd
+
 import pytest
+
 from drillguard.ingestion import IngestionError, load_csv, validate_frame
 from drillguard.synthetic import make_scenario
+
 
 def test_load_example(tmp_path: Path):
     df, _ = make_scenario("normal", n=50, seed=0)

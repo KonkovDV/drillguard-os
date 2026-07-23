@@ -2,6 +2,7 @@ from drillguard.detector import detect
 from drillguard.schema import COMPLICATION_CLASSES
 from drillguard.synthetic import make_scenario
 
+
 def test_packoff():
     df, gt = make_scenario("packoff", seed=0)
     out = detect(df)

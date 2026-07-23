@@ -2,6 +2,7 @@ from drillguard.regimes import add_regimes, classify_operation
 from drillguard.synthetic import make_scenario
 from drillguard.timebase import prepare_timebase
 
+
 def test_classify():
     assert classify_operation("drilling ahead") == "drilling"
     assert classify_operation("connection") == "connection"

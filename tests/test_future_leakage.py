@@ -1,6 +1,7 @@
 """Future leakage and prefix/full causality tests."""
 
 import numpy as np
+
 from drillguard.detector import detect
 from drillguard.synthetic import make_scenario
 
@@ -48,10 +49,10 @@ def test_candidate_mask_flag_present():
 def test_baseline_does_not_track_confirmed_ramp():
     """During a strong sustained ramp, baseline median must stay near pre-event level."""
     from drillguard.baseline import BaselineConfig, add_causal_baselines
+    from drillguard.ingestion import validate_frame
     from drillguard.quality import add_quality_flags
     from drillguard.regimes import add_regimes
     from drillguard.timebase import prepare_timebase
-    from drillguard.ingestion import validate_frame
 
     df, gt = make_scenario("packoff", seed=0)
     frame = add_causal_baselines(

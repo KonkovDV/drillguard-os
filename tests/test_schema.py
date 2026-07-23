@@ -1,7 +1,9 @@
+import pandas as pd
 import pytest
+
 from drillguard.ingestion import IngestionError, validate_frame
 from drillguard.schema import REQUIRED_COLUMNS, schema_manifest
-import pandas as pd
+
 
 def test_schema_manifest():
     m = schema_manifest()

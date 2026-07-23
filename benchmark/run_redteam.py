@@ -13,7 +13,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from drillguard.detector import detect  # noqa: E402
-from drillguard.ingestion import IngestionError, load_csv, validate_frame  # noqa: E402
+from drillguard.ingestion import IngestionError, load_csv  # noqa: E402
 from drillguard.report import build_report, write_html  # noqa: E402
 from drillguard.schema import ALGORITHM_VERSION, COMPLICATION_CLASSES  # noqa: E402
 from drillguard.synthetic import make_scenario  # noqa: E402

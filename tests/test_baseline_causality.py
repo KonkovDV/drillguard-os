@@ -1,5 +1,7 @@
 import numpy as np
+
 from drillguard.baseline import BaselineConfig, causal_baseline_stats
+
 
 def test_no_future_leakage():
     n = 80

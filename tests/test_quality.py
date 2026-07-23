@@ -1,7 +1,9 @@
 import numpy as np
+
 from drillguard.quality import add_quality_flags
 from drillguard.synthetic import make_scenario
 from drillguard.timebase import prepare_timebase
+
 
 def test_nan_flag():
     df, _ = make_scenario("normal", n=50, seed=0)

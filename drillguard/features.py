@@ -2,11 +2,9 @@
 
 from __future__ import annotations
 
-import numpy as np
 import pandas as pd
 
 from .baseline import BaselineConfig, add_causal_baselines
-
 
 FEATURE_CATALOG = {
     "standpipe_pressure_kpa_z": {

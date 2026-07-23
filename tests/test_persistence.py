@@ -1,5 +1,6 @@
 from drillguard.persistence import PersistenceConfig, PersistenceState, step_persistence
 
+
 def test_confirm_requires_duration():
     st = PersistenceState()
     cfg = PersistenceConfig(confirm_seconds=5, transient_max_seconds=3)
