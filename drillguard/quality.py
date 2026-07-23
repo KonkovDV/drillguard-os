@@ -61,18 +61,21 @@ def add_quality_flags(df: pd.DataFrame) -> pd.DataFrame:
 
     if "gap_flag" in out.columns:
         for i in np.where(out["gap_flag"].fillna(False).to_numpy())[0]:
-            if reasons[i] == "ok":
+            if quality_ok[i]:
                 reasons[i] = "gap_in_timeline"
+                quality_ok[i] = False
 
     if "irregular_dt" in out.columns:
         for i in np.where(out["irregular_dt"].fillna(False).to_numpy())[0]:
-            if reasons[i] == "ok":
+            if quality_ok[i]:
                 reasons[i] = "irregular_timebase"
+                quality_ok[i] = False
 
     if "channel_desync_suspect" in out.columns:
         for i in np.where(out["channel_desync_suspect"].fillna(False).to_numpy())[0]:
-            if reasons[i] == "ok":
+            if quality_ok[i]:
                 reasons[i] = "channel_desynchronized"
+                quality_ok[i] = False
 
     spp = out["standpipe_pressure_kpa"].to_numpy(dtype=float)
     stuck = np.zeros(n, dtype=bool)

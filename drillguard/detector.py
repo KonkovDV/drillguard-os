@@ -24,7 +24,7 @@ PHASE_MAP = {
     "confirmed": "CONFIRMED",
     "clearing": "CONFIRMED",
     "cooldown": "COOLDOWN",
-    "transient": "CANDIDATE",
+    "transient": "TRANSIENT",
     "informational": "IDLE",
 }
 
@@ -205,10 +205,14 @@ def detect(df: pd.DataFrame, cfg: DetectorConfig | None = None) -> pd.DataFrame:
             phase = "WARMUP" if proposed == EventClass.INSUFFICIENT_HISTORY.value else "QUALITY_BLOCKED"
         else:
             prop = proposed if proposed in COMPLICATION_CLASSES else None
-            state, label, raw_phase = step_persistence(state, prop, dt, pcfg)
+            state, label, raw_phase = step_persistence(
+                state, prop, dt, pcfg, elapsed_s=float((row["timestamp"] - t0).total_seconds())
+            )
             phase = PHASE_MAP.get(raw_phase, raw_phase.upper())
             if label in COMPLICATION_CLASSES and raw_phase == "confirmed":
-                score = max(score, 0.5)
+                # Do not polish influx-candidate score upward — confound scenarios must stay honest.
+                if label != EventClass.POSSIBLE_INFLUX_CANDIDATE.value:
+                    score = max(score, 0.5)
                 if active_event_id is None:
                     event_counter += 1
                     active_event_id = f"E{event_counter:04d}"

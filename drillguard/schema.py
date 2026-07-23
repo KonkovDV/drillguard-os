@@ -166,5 +166,5 @@ def schema_manifest() -> dict[str, Any]:
             "Field calibration requires labeled archive and temporal holdout."
         ),
         "feature_kinds": FEATURE_KIND,
-        "claims_boundary": "synthetic_or_requires_field_validation",
+        "claims_boundary": "synthetic_only_requires_field_validation",
     }

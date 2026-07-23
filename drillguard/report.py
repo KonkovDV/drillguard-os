@@ -24,6 +24,8 @@ def build_report(
         "scenario": scenario,
         "data_origin": data_origin,
         "source_id": source_id or out.attrs.get("source_id", "<memory>"),
+        "claim_level": "synthetic_only",
+        "requires_field_validation": True,
         "advisory_banner": (
             "Только рекомендация. Система не управляет буровой, не пишет в АСУ ТП/SCADA "
             "и не является противоаварийной защитой."

@@ -1,6 +1,6 @@
 {
   "algorithm_version": "0.2.2",
-  "limitations_banner": "SYNTHETIC ONLY. Not field accuracy. event appearance rate is demoted and must not be used as the headline KPI. possible_influx_candidate is not well-control diagnosis. Requires labeled archive + temporal holdout for any field claim.",
+  "limitations_banner": "SYNTHETIC ONLY. Not field accuracy. heuristic_score is not a probability. Event appearance rate is demoted and must not be used as the headline KPI. possible_influx_candidate is not well-control diagnosis. Requires labeled archive + temporal holdout for any field claim.",
   "claim_level": "synthetic_only",
   "requires_field_validation": true,
   "scenarios": [
@@ -40,14 +40,14 @@
         "tp": 0,
         "fp": 0,
         "fn": 0,
-        "tn": -400,
+        "tn": 400,
         "class": "none",
-        "event_detected_in_window": true,
+        "event_detected_in_window": false,
+        "gate_no_complication": true,
         "latest_is_truth": true,
         "detection_delay_s": null,
         "event_fragments": 0,
-        "time_to_clear_s": null,
-        "gate_no_complication": true
+        "time_to_clear_s": null
       },
       "level_b": {
         "class": "n/a"
@@ -203,20 +203,21 @@
       "requires_field_validation": true,
       "truth_class": "ballooning_like",
       "level_a": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
+        "class": "n/a_confound_scenario",
+        "note": "ballooning_like is a Level B confound; do not read Level A F1/FA as failure. Red-team gate: possible_influx_candidate allowed with well_control_overclaim=false.",
+        "f1": null,
+        "precision": null,
+        "recall": null,
         "tp": 0,
-        "fp": 96,
+        "fp": 0,
         "fn": 0,
-        "tn": -496,
-        "class": "none",
+        "tn": 400,
         "event_detected_in_window": false,
-        "latest_is_truth": false,
+        "latest_is_truth": true,
         "detection_delay_s": null,
         "event_fragments": 0,
         "time_to_clear_s": null,
-        "gate_no_complication": false
+        "influx_candidate_rows": 96
       },
       "level_b": {
         "class": "n/a",
@@ -229,13 +230,11 @@
         "warmup_rows": 25,
         "latest_event": "possible_influx_candidate",
         "stable_terminal_not_required_for_operation_change": false,
-        "false_alarm_rows": 96,
-        "false_alarms_per_hour": 866.1654135338346,
-        "false_alarm_events": 1,
-        "mean_false_alarm_duration_s": 95.0,
-        "false_alarm_durations_s": [
-          95.0
-        ]
+        "false_alarm_rows": 0,
+        "false_alarms_per_hour": 0.0,
+        "false_alarm_events": 0,
+        "mean_false_alarm_duration_s": 0.0,
+        "false_alarm_durations_s": []
       },
       "compat_event_appeared": false,
       "compat_latest_match": false
@@ -410,14 +409,14 @@
         "tp": 0,
         "fp": 0,
         "fn": 0,
-        "tn": -400,
+        "tn": 400,
         "class": "none",
-        "event_detected_in_window": true,
+        "event_detected_in_window": false,
+        "gate_no_complication": true,
         "latest_is_truth": true,
         "detection_delay_s": null,
         "event_fragments": 0,
-        "time_to_clear_s": null,
-        "gate_no_complication": true
+        "time_to_clear_s": null
       },
       "level_b": {
         "class": "n/a"
@@ -452,14 +451,14 @@
         "tp": 0,
         "fp": 0,
         "fn": 0,
-        "tn": -400,
+        "tn": 400,
         "class": "none",
-        "event_detected_in_window": true,
+        "event_detected_in_window": false,
+        "gate_no_complication": true,
         "latest_is_truth": true,
         "detection_delay_s": null,
         "event_fragments": 0,
-        "time_to_clear_s": null,
-        "gate_no_complication": true
+        "time_to_clear_s": null
       },
       "level_b": {
         "class": "n/a"
@@ -615,20 +614,21 @@
       "requires_field_validation": true,
       "truth_class": "ballooning_like",
       "level_a": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
+        "class": "n/a_confound_scenario",
+        "note": "ballooning_like is a Level B confound; do not read Level A F1/FA as failure. Red-team gate: possible_influx_candidate allowed with well_control_overclaim=false.",
+        "f1": null,
+        "precision": null,
+        "recall": null,
         "tp": 0,
-        "fp": 102,
+        "fp": 0,
         "fn": 0,
-        "tn": -502,
-        "class": "none",
+        "tn": 400,
         "event_detected_in_window": false,
-        "latest_is_truth": false,
+        "latest_is_truth": true,
         "detection_delay_s": null,
         "event_fragments": 0,
         "time_to_clear_s": null,
-        "gate_no_complication": false
+        "influx_candidate_rows": 102
       },
       "level_b": {
         "class": "n/a",
@@ -641,13 +641,11 @@
         "warmup_rows": 25,
         "latest_event": "possible_influx_candidate",
         "stable_terminal_not_required_for_operation_change": false,
-        "false_alarm_rows": 102,
-        "false_alarms_per_hour": 920.3007518796992,
-        "false_alarm_events": 1,
-        "mean_false_alarm_duration_s": 101.0,
-        "false_alarm_durations_s": [
-          101.0
-        ]
+        "false_alarm_rows": 0,
+        "false_alarms_per_hour": 0.0,
+        "false_alarm_events": 0,
+        "mean_false_alarm_duration_s": 0.0,
+        "false_alarm_durations_s": []
       },
       "compat_event_appeared": false,
       "compat_latest_match": false
@@ -822,14 +820,14 @@
         "tp": 0,
         "fp": 0,
         "fn": 0,
-        "tn": -400,
+        "tn": 400,
         "class": "none",
-        "event_detected_in_window": true,
+        "event_detected_in_window": false,
+        "gate_no_complication": true,
         "latest_is_truth": true,
         "detection_delay_s": null,
         "event_fragments": 0,
-        "time_to_clear_s": null,
-        "gate_no_complication": true
+        "time_to_clear_s": null
       },
       "level_b": {
         "class": "n/a"
@@ -864,14 +862,14 @@
         "tp": 0,
         "fp": 0,
         "fn": 0,
-        "tn": -400,
+        "tn": 400,
         "class": "none",
-        "event_detected_in_window": true,
+        "event_detected_in_window": false,
+        "gate_no_complication": true,
         "latest_is_truth": true,
         "detection_delay_s": null,
         "event_fragments": 0,
-        "time_to_clear_s": null,
-        "gate_no_complication": true
+        "time_to_clear_s": null
       },
       "level_b": {
         "class": "n/a"
@@ -1027,20 +1025,21 @@
       "requires_field_validation": true,
       "truth_class": "ballooning_like",
       "level_a": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
+        "class": "n/a_confound_scenario",
+        "note": "ballooning_like is a Level B confound; do not read Level A F1/FA as failure. Red-team gate: possible_influx_candidate allowed with well_control_overclaim=false.",
+        "f1": null,
+        "precision": null,
+        "recall": null,
         "tp": 0,
-        "fp": 107,
+        "fp": 0,
         "fn": 0,
-        "tn": -507,
-        "class": "none",
+        "tn": 400,
         "event_detected_in_window": false,
-        "latest_is_truth": false,
+        "latest_is_truth": true,
         "detection_delay_s": null,
         "event_fragments": 0,
         "time_to_clear_s": null,
-        "gate_no_complication": false
+        "influx_candidate_rows": 107
       },
       "level_b": {
         "class": "n/a",
@@ -1053,13 +1052,11 @@
         "warmup_rows": 25,
         "latest_event": "possible_influx_candidate",
         "stable_terminal_not_required_for_operation_change": false,
-        "false_alarm_rows": 107,
-        "false_alarms_per_hour": 965.4135338345864,
-        "false_alarm_events": 1,
-        "mean_false_alarm_duration_s": 106.0,
-        "false_alarm_durations_s": [
-          106.0
-        ]
+        "false_alarm_rows": 0,
+        "false_alarms_per_hour": 0.0,
+        "false_alarm_events": 0,
+        "mean_false_alarm_duration_s": 0.0,
+        "false_alarm_durations_s": []
       },
       "compat_event_appeared": false,
       "compat_latest_match": false
@@ -1234,14 +1231,14 @@
         "tp": 0,
         "fp": 0,
         "fn": 0,
-        "tn": -400,
+        "tn": 400,
         "class": "none",
-        "event_detected_in_window": true,
+        "event_detected_in_window": false,
+        "gate_no_complication": true,
         "latest_is_truth": true,
         "detection_delay_s": null,
         "event_fragments": 0,
-        "time_to_clear_s": null,
-        "gate_no_complication": true
+        "time_to_clear_s": null
       },
       "level_b": {
         "class": "n/a"
@@ -1276,14 +1273,14 @@
         "tp": 0,
         "fp": 0,
         "fn": 0,
-        "tn": -400,
+        "tn": 400,
         "class": "none",
-        "event_detected_in_window": true,
+        "event_detected_in_window": false,
+        "gate_no_complication": true,
         "latest_is_truth": true,
         "detection_delay_s": null,
         "event_fragments": 0,
-        "time_to_clear_s": null,
-        "gate_no_complication": true
+        "time_to_clear_s": null
       },
       "level_b": {
         "class": "n/a"
@@ -1439,20 +1436,21 @@
       "requires_field_validation": true,
       "truth_class": "ballooning_like",
       "level_a": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
+        "class": "n/a_confound_scenario",
+        "note": "ballooning_like is a Level B confound; do not read Level A F1/FA as failure. Red-team gate: possible_influx_candidate allowed with well_control_overclaim=false.",
+        "f1": null,
+        "precision": null,
+        "recall": null,
         "tp": 0,
-        "fp": 100,
+        "fp": 0,
         "fn": 0,
-        "tn": -500,
-        "class": "none",
+        "tn": 400,
         "event_detected_in_window": false,
-        "latest_is_truth": false,
+        "latest_is_truth": true,
         "detection_delay_s": null,
         "event_fragments": 0,
         "time_to_clear_s": null,
-        "gate_no_complication": false
+        "influx_candidate_rows": 100
       },
       "level_b": {
         "class": "n/a",
@@ -1465,13 +1463,11 @@
         "warmup_rows": 25,
         "latest_event": "possible_influx_candidate",
         "stable_terminal_not_required_for_operation_change": false,
-        "false_alarm_rows": 100,
-        "false_alarms_per_hour": 902.2556390977443,
-        "false_alarm_events": 1,
-        "mean_false_alarm_duration_s": 99.0,
-        "false_alarm_durations_s": [
-          99.0
-        ]
+        "false_alarm_rows": 0,
+        "false_alarms_per_hour": 0.0,
+        "false_alarm_events": 0,
+        "mean_false_alarm_duration_s": 0.0,
+        "false_alarm_durations_s": []
       },
       "compat_event_appeared": false,
       "compat_latest_match": false
@@ -1646,14 +1642,14 @@
         "tp": 0,
         "fp": 0,
         "fn": 0,
-        "tn": -400,
+        "tn": 400,
         "class": "none",
-        "event_detected_in_window": true,
+        "event_detected_in_window": false,
+        "gate_no_complication": true,
         "latest_is_truth": true,
         "detection_delay_s": null,
         "event_fragments": 0,
-        "time_to_clear_s": null,
-        "gate_no_complication": true
+        "time_to_clear_s": null
       },
       "level_b": {
         "class": "n/a"
@@ -1688,14 +1684,14 @@
         "tp": 0,
         "fp": 0,
         "fn": 0,
-        "tn": -400,
+        "tn": 400,
         "class": "none",
-        "event_detected_in_window": true,
+        "event_detected_in_window": false,
+        "gate_no_complication": true,
         "latest_is_truth": true,
         "detection_delay_s": null,
         "event_fragments": 0,
-        "time_to_clear_s": null,
-        "gate_no_complication": true
+        "time_to_clear_s": null
       },
       "level_b": {
         "class": "n/a"
@@ -1851,20 +1847,21 @@
       "requires_field_validation": true,
       "truth_class": "ballooning_like",
       "level_a": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
+        "class": "n/a_confound_scenario",
+        "note": "ballooning_like is a Level B confound; do not read Level A F1/FA as failure. Red-team gate: possible_influx_candidate allowed with well_control_overclaim=false.",
+        "f1": null,
+        "precision": null,
+        "recall": null,
         "tp": 0,
-        "fp": 104,
+        "fp": 0,
         "fn": 0,
-        "tn": -504,
-        "class": "none",
+        "tn": 400,
         "event_detected_in_window": false,
-        "latest_is_truth": false,
+        "latest_is_truth": true,
         "detection_delay_s": null,
         "event_fragments": 0,
         "time_to_clear_s": null,
-        "gate_no_complication": false
+        "influx_candidate_rows": 104
       },
       "level_b": {
         "class": "n/a",
@@ -1877,13 +1874,11 @@
         "warmup_rows": 25,
         "latest_event": "possible_influx_candidate",
         "stable_terminal_not_required_for_operation_change": false,
-        "false_alarm_rows": 104,
-        "false_alarms_per_hour": 938.3458646616541,
-        "false_alarm_events": 1,
-        "mean_false_alarm_duration_s": 103.0,
-        "false_alarm_durations_s": [
-          103.0
-        ]
+        "false_alarm_rows": 0,
+        "false_alarms_per_hour": 0.0,
+        "false_alarm_events": 0,
+        "mean_false_alarm_duration_s": 0.0,
+        "false_alarm_durations_s": []
       },
       "compat_event_appeared": false,
       "compat_latest_match": false
@@ -2058,14 +2053,14 @@
         "tp": 0,
         "fp": 0,
         "fn": 0,
-        "tn": -400,
+        "tn": 400,
         "class": "none",
-        "event_detected_in_window": true,
+        "event_detected_in_window": false,
+        "gate_no_complication": true,
         "latest_is_truth": true,
         "detection_delay_s": null,
         "event_fragments": 0,
-        "time_to_clear_s": null,
-        "gate_no_complication": true
+        "time_to_clear_s": null
       },
       "level_b": {
         "class": "n/a"
@@ -2200,12 +2195,12 @@
       "ballooning_like": {
         "n": 5,
         "f1": {
-          "mean": 0.0,
-          "min": 0.0,
-          "median": 0.0,
-          "max": 0.0,
-          "p05": 0.0,
-          "p95": 0.0
+          "mean": null,
+          "min": null,
+          "median": null,
+          "max": null,
+          "p05": null,
+          "p95": null
         },
         "detection_delay_s": {
           "mean": null,
@@ -2214,10 +2209,10 @@
           "max": null
         },
         "false_alarms_per_hour": {
-          "mean": 918.4962406015038,
-          "min": 866.1654135338346,
-          "median": 920.3007518796992,
-          "max": 965.4135338345864
+          "mean": 0.0,
+          "min": 0.0,
+          "median": 0.0,
+          "max": 0.0
         },
         "rate_expected_class_appeared": 0.0,
         "rate_latest_equals_truth": 0.0,

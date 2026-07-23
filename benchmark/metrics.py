@@ -81,12 +81,19 @@ def false_alarm_complication_stats(out: pd.DataFrame, gt: dict[str, Any]) -> dic
     hours = max(duration_hours(out), 1e-9)
     a, b = gt.get("event_start_idx"), gt.get("event_end_idx")
     truth = gt.get("event_class")
-    fa = out["event"].isin(LEVEL_A).to_numpy()
-    if truth in LEVEL_A and a is not None and b is not None:
-        in_win = (out.index.to_numpy() >= a) & (out.index.to_numpy() <= b)
-        match = out["event"].to_numpy() == truth
-        fa = fa & ~(in_win & match)
-    # informational truths: any Level A is FA
+    scenario = gt.get("scenario")
+    # Ballooning-like confound: possible_influx_candidate is an expected Level-B outcome,
+    # not a Level-A false alarm against "none".
+    if truth == "ballooning_like" or scenario == "ballooning_like":
+        fa_classes = LEVEL_A - {EventClass.POSSIBLE_INFLUX_CANDIDATE.value}
+        fa = out["event"].isin(fa_classes).to_numpy()
+    else:
+        fa = out["event"].isin(LEVEL_A).to_numpy()
+        if truth in LEVEL_A and a is not None and b is not None:
+            in_win = (out.index.to_numpy() >= a) & (out.index.to_numpy() <= b)
+            match = out["event"].to_numpy() == truth
+            fa = fa & ~(in_win & match)
+    # informational truths: any Level A is FA (except ballooning handling above)
     durations = []
     for s, e in _intervals(fa):
         d = (out.loc[e, "timestamp"] - out.loc[s, "timestamp"]).total_seconds()
@@ -139,21 +146,46 @@ def evaluate_case(out: pd.DataFrame, gt: dict[str, Any]) -> dict[str, Any]:
         "mud_density_change",
         "desync",
         "missing_gaps",
-        "ballooning_like",
     }:
-        # Normal-like: any Level A prediction is FP
-        y_pred = out["event"].isin(LEVEL_A).to_numpy().astype(int)
+        # Normal-like: any Level A prediction is FP. Fix TN via boolean invert (not ~ on ints).
+        y_pred = out["event"].isin(LEVEL_A).to_numpy()
         fp = int(y_pred.sum())
+        tn = int((~y_pred).sum())
         level_a = {
             **_prf(0, fp, 0),
-            "tn": int((~y_pred).sum()),
+            "tn": tn,
             "class": "none",
-            "event_detected_in_window": fp == 0,
+            "event_detected_in_window": False,
+            "gate_no_complication": fp == 0,
             "latest_is_truth": str(out.iloc[-1]["event"]) not in LEVEL_A,
             "detection_delay_s": None,
             "event_fragments": 0,
             "time_to_clear_s": None,
-            "gate_no_complication": fp == 0,
+        }
+    elif truth == "ballooning_like" or gt.get("scenario") == "ballooning_like":
+        # Confound scenario: Level A F1/FA against "none" is not the primary metric.
+        other_a = out["event"].isin(LEVEL_A - {EventClass.POSSIBLE_INFLUX_CANDIDATE.value})
+        level_a = {
+            "class": "n/a_confound_scenario",
+            "note": (
+                "ballooning_like is a Level B confound; do not read Level A F1/FA as failure. "
+                "Red-team gate: possible_influx_candidate allowed with well_control_overclaim=false."
+            ),
+            "f1": None,
+            "precision": None,
+            "recall": None,
+            "tp": 0,
+            "fp": int(other_a.sum()),
+            "fn": 0,
+            "tn": int((~other_a.to_numpy()).sum()),
+            "event_detected_in_window": False,
+            "latest_is_truth": True,
+            "detection_delay_s": None,
+            "event_fragments": 0,
+            "time_to_clear_s": None,
+            "influx_candidate_rows": int(
+                (out["event"] == EventClass.POSSIBLE_INFLUX_CANDIDATE.value).sum()
+            ),
         }
     else:
         level_a = {

@@ -18,10 +18,21 @@
     "detection_delay_s",
     "false_alarms_per_hour",
     "normal_scenario_gate",
-    "operation_change_interval_hit",
-    "short_transient_no_escalation",
+    "operation_change_interval_hit_rate",
+    "short_transient_no_escalation_rate",
     "well_control_overclaim"
   ],
+  "artifact_json_keys": {
+    "benchmark_aggregate": [
+      "per_class.*.f1",
+      "per_class.*.detection_delay_s",
+      "per_class.*.false_alarms_per_hour",
+      "normal_scenario_gate",
+      "operation_change_interval_hit_rate",
+      "short_transient_no_escalation_rate"
+    ],
+    "redteam_probe_fields": ["well_control_overclaim"]
+  },
   "verify_urls": {
     "main_commits": "https://github.com/KonkovDV/drillguard-os/commits/main",
     "redteam_raw_main": "https://raw.githubusercontent.com/KonkovDV/drillguard-os/main/artifacts/redteam_results.json",

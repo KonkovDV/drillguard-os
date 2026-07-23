@@ -11,29 +11,29 @@ th{background:#f4f4f4;text-align:left}
 </style></head><body>
 <div class="banner"><strong>Только рекомендация. Система не управляет буровой, не пишет в АСУ ТП/SCADA и не является противоаварийной защитой.</strong></div>
 <h1>DrillGuard OS — event cards</h1>
-<p class="meta">version=0.2.0
+<p class="meta">version=0.2.2
  | origin=synthetic
- | source=synthetic:packoff
+ | source=packoff
  | score=heuristic_score is NOT a calibrated probability</p>
 <pre>{
   &quot;latest_event&quot;: &quot;possible_packoff&quot;,
   &quot;latest_heuristic_score&quot;: 0.8,
-  &quot;latest_action&quot;: &quot;Проверить циркуляцию, содержание шлама и признаки ухудшения очистки ствола (только проверка; без автоматических команд).&quot;,
+  &quot;latest_action&quot;: &quot;Кандидат на ухудшение очистки ствола или ограничение циркуляции. Проверить циркуляцию и шлам (только проверка; без автоматических команд).&quot;,
   &quot;rows&quot;: 400,
   &quot;quality_ok_pct&quot;: 100.0,
   &quot;event_counts&quot;: {
-    &quot;possible_packoff&quot;: 189,
+    &quot;possible_packoff&quot;: 191,
     &quot;none&quot;: 168,
     &quot;insufficient_history&quot;: 25,
-    &quot;normal_noise&quot;: 17,
+    &quot;normal_noise&quot;: 15,
     &quot;short_transient&quot;: 1
   },
-  &quot;algorithm_version&quot;: &quot;0.2.0&quot;,
+  &quot;algorithm_version&quot;: &quot;0.2.2&quot;,
   &quot;score_semantics&quot;: &quot;heuristic_score_not_probability&quot;
 }</pre>
 <table>
 <thead><tr><th>Start</th><th>Class</th><th>Score</th><th>Regime</th><th>Check</th><th>Unknowns</th></tr></thead>
 <tbody>
-<tr><td>2026-01-01 00:03:12</td><td>short_transient</td><td>0.15</td><td>drilling</td><td>Короткий выброс; наблюдать без эскалации.</td><td>Полевая точность не подтверждена.</td></tr><tr><td>2026-01-01 00:03:31</td><td>possible_packoff</td><td>0.8</td><td>drilling</td><td>Проверить циркуляцию, содержание шлама и признаки ухудшения очистки ствола (только проверка; без автоматических команд).</td><td>Не модель шламовой пробки; эмпирический гидравлический экран.</td></tr>
+<tr><td>2026-01-01 00:03:12</td><td>short_transient</td><td>0.15</td><td>drilling</td><td>Короткий выброс; наблюдать без эскалации.</td><td>Полевая точность не подтверждена (requires_field_validation).</td></tr><tr><td>2026-01-01 00:03:29</td><td>possible_packoff</td><td>0.8</td><td>drilling</td><td>Кандидат на ухудшение очистки ствола или ограничение циркуляции. Проверить циркуляцию и шлам (только проверка; без автоматических команд).</td><td>Не модель шламовой пробки; эмпирический гидравлический экран.</td></tr>
 </tbody></table>
 </body></html>

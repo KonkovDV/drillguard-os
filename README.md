@@ -295,6 +295,7 @@ python -m drillguard.cli dashboard --csv path/to/series.csv --html artifacts/das
 | [`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md) | модель угроз |
 | [`docs/INDUSTRIX_APPLICATION_SYNC.md`](docs/INDUSTRIX_APPLICATION_SYNC.md) | синхронизация формулировок заявки |
 | [`docs/EVIDENCE_SYNC.md`](docs/EVIDENCE_SYNC.md) | сверка claims ↔ артефакты |
+| [`docs/AUDIT_REDTEAM_2026_07_24.md`](docs/AUDIT_REDTEAM_2026_07_24.md) | red-team аудит + disposition |
 | [`docs/AUDIT_2026_07_23.md`](docs/AUDIT_2026_07_23.md) | аудит |
 | [`docs/CHANGELOG.md`](docs/CHANGELOG.md) · [`RELEASE_NOTES_v0.2.2.md`](RELEASE_NOTES_v0.2.2.md) | история изменений |
 | [`docs/RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) | чеклист релиза |

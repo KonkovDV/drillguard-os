@@ -48,7 +48,7 @@ def _card(
     seg = out.iloc[i0 : i1 + 1]
     first = seg.iloc[0]
     last = seg.iloc[-1]
-    confirm = seg[seg["detector_phase"] == "confirmed"]
+    confirm = seg[seg["detector_phase"].astype(str).str.upper() == "CONFIRMED"]
     confirm_time = (
         str(confirm.iloc[0]["timestamp"]) if len(confirm) else str(first["timestamp"])
     )
@@ -56,17 +56,22 @@ def _card(
         (last["timestamp"] - first["timestamp"]).total_seconds(),
         float(first.get("median_dt_s", 1.0)),
     )
+    max_score = float(seg["heuristic_score"].max())
+    # Overclaim only if an influx-like card is polished into a high-confidence diagnosis.
+    well_control_overclaim = (
+        event == EventClass.POSSIBLE_INFLUX_CANDIDATE.value and max_score > 0.55
+    )
     return {
         "event_class": event,
         "display_label": str(last.get("display_label", event)),
-        "well_control_overclaim": False,
+        "well_control_overclaim": well_control_overclaim,
         "start_time": str(first["timestamp"]),
         "confirm_time": confirm_time,
         "end_time": str(last["timestamp"]),
         "duration_s": round(duration_s, 3),
         "depth_m": float(first["depth_m"]),
         "regime": str(first["regime"]),
-        "heuristic_score": float(seg["heuristic_score"].max()),
+        "heuristic_score": max_score,
         "score_semantics": "heuristic_rule_weight_not_calibrated_probability",
         "data_quality_ok_pct": round(float(seg["quality_ok"].mean() * 100), 2),
         "contributing_features": str(seg["contributing_features"].iloc[-1]),

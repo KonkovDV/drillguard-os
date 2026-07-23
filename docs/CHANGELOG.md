@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.2 — 2026-07-24 (red-team hardening, counts unchanged)
+
+- Fixed negative TN (`~` on int masks), ballooning confound scoring, confirm_time CONFIRMED match.
+- Persistence: enforce `min_points`, cap credited Δt; quality gates gaps/desync.
+- Align `pressure_per_flow` baseline with regime-run keys + candidate freeze.
+- API: streamed size limit, origin allowlist; reports carry claim fields.
+- CI: Benchmark → Redteam → Pytest; remove false-green security `or True`.
+- Audit: `docs/AUDIT_REDTEAM_2026_07_24.md`. Claim counts still 53 / 50 / 12·11.
+
 ## 0.2.2 — 2026-07-23
 
 - CLAIMS_MANIFEST + artifact consistency tests (P0 evidence sync).

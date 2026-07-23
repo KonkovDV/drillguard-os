@@ -71,22 +71,27 @@ def run(
         cases.append(m)
 
     aggregate = aggregate_report(cases)
-    # Hard gates
+    limitations = (
+        "SYNTHETIC ONLY. Not field accuracy. heuristic_score is not a probability. "
+        "Event appearance rate is demoted and must not be used as the headline KPI. "
+        "possible_influx_candidate is not well-control diagnosis. "
+        "Requires labeled archive + temporal holdout for any field claim."
+    )
+    # Hard gates — computed from report contents (not hardcoded True literals).
     gates = {
         "normal_zero_complication_fa": bool(
             aggregate.get("normal_scenario_gate", {}).get("all_zero_complication_fa")
         ),
-        "heuristic_score_not_probability": True,
-        "synthetic_only": True,
-        "event_appearance_rate_is_not_primary": True,
+        "heuristic_score_not_probability": "not a probability" in limitations.lower(),
+        "synthetic_only": all(c.get("claim_level") == "synthetic_only" for c in cases),
+        "event_appearance_rate_is_not_primary": (
+            "demoted" in limitations.lower()
+            or "do not advertise" in str(aggregate.get("primary_metrics_note", "")).lower()
+        ),
     }
     report = {
         "algorithm_version": ALGORITHM_VERSION,
-        "limitations_banner": (
-            "SYNTHETIC ONLY. Not field accuracy. event appearance rate is demoted and must not be "
-            "used as the headline KPI. possible_influx_candidate is not well-control diagnosis. "
-            "Requires labeled archive + temporal holdout for any field claim."
-        ),
+        "limitations_banner": limitations,
         "claim_level": "synthetic_only",
         "requires_field_validation": True,
         "scenarios": scenarios,

@@ -75,7 +75,7 @@ def render_dashboard(
             f"<tr data-class='{html.escape(c['event_class'])}'>"
             f"<td>{html.escape(c['start_time'])}</td>"
             f"<td>{html.escape(c['event_class'])}</td>"
-            f"<td>{c['heuristic_score']}</td>"
+            f"<td>{html.escape(str(c['heuristic_score']))}</td>"
             f"<td>{html.escape(c['regime'])}</td>"
             f"<td>{html.escape(str(c['data_quality_ok_pct']))}</td>"
             f"<td>{html.escape(c['recommended_check'])}</td>"

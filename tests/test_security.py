@@ -23,6 +23,9 @@ def test_file_size_limit(tmp_path: Path):
 def test_api_declares_no_control():
     pytest.importorskip("fastapi")
     app = create_app()
-    # inspect openapi description
-    assert "No SCADA" in app.description or "No SCADA" in (app.openapi_tags or []) or True
-    assert "control" in app.description.lower() or "scada" in app.description.lower()
+    assert "No SCADA" in app.description
+    assert "control" in app.description.lower()
+    health = app.routes  # noqa: F841 — ensure app builds
+    # /health contract checked via create_app factory defaults
+    assert app.version
+    assert "probability" in app.description.lower()

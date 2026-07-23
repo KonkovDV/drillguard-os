@@ -3,6 +3,8 @@
   "scenario": "packoff",
   "data_origin": "synthetic",
   "source_id": "synthetic:packoff:seed=0",
+  "claim_level": "synthetic_only",
+  "requires_field_validation": true,
   "advisory_banner": "Только рекомендация. Система не управляет буровой, не пишет в АСУ ТП/SCADA и не является противоаварийной защитой.",
   "score_semantics": "heuristic_score is NOT a calibrated probability",
   "summary": {
@@ -46,7 +48,7 @@
         "standpipe_pressure_kpa_z": 5.8237,
         "pump_flow_lpm_z": 0.4683,
         "torque_drag_index": 2.0269,
-        "pressure_per_flow_z": 1.6128
+        "pressure_per_flow_z": 1.6403
       },
       "unknowns": "Полевая точность не подтверждена (requires_field_validation).",
       "recommended_check": "Короткий выброс; наблюдать без эскалации.",
@@ -70,7 +72,7 @@
       "heuristic_score": 0.8,
       "score_semantics": "heuristic_rule_weight_not_calibrated_probability",
       "data_quality_ok_pct": 100.0,
-      "contributing_features": "spp_z=57.01;flow_z=14.83;spp_q_z=5.41",
+      "contributing_features": "spp_z=57.01;flow_z=14.83;spp_q_z=5.86",
       "baseline_interval": {
         "window_points": 60,
         "min_history": 25,
@@ -81,7 +83,7 @@
         "standpipe_pressure_kpa_z": 11.5527,
         "pump_flow_lpm_z": 1.2762,
         "torque_drag_index": 4.253,
-        "pressure_per_flow_z": 2.7486
+        "pressure_per_flow_z": 2.907
       },
       "unknowns": "Не модель шламовой пробки; эмпирический гидравлический экран.",
       "recommended_check": "Кандидат на ухудшение очистки ствола или ограничение циркуляции. Проверить циркуляцию и шлам (только проверка; без автоматических команд).",

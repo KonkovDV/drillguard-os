@@ -53,5 +53,7 @@ target-version = "py310"
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
 # E501: long RU/HTML strings and signatures are intentional in this package.
-# B008: FastAPI `File(...)` defaults are idiomatic dependency injection.
-ignore = ["E501", "B008"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"drillguard/api.py" = ["B008"]

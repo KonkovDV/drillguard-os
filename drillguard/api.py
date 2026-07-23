@@ -11,6 +11,14 @@ from .report import build_report
 from .schema import ALGORITHM_VERSION, schema_manifest
 
 MAX_UPLOAD_BYTES = 20 * 1024 * 1024
+ALLOWED_ORIGINS = frozenset(
+    {
+        "synthetic",
+        "field_unvalidated",
+        "archive_unvalidated",
+        "shadow_mode",
+    }
+)
 
 
 def create_app():
@@ -33,6 +41,8 @@ def create_app():
             "algorithm_version": ALGORITHM_VERSION,
             "control_actions": False,
             "network_side_effects": False,
+            "claim_level": "synthetic_only",
+            "requires_field_validation": True,
         }
 
     @app.get("/schema")
@@ -41,12 +51,30 @@ def create_app():
 
     @app.post("/screen")
     async def screen(
-        file: UploadFile = File(...),
+        file: UploadFile = File(...),  # noqa: B008
         origin: str = "field_unvalidated",
     ) -> JSONResponse:
-        raw = await file.read()
-        if len(raw) > MAX_UPLOAD_BYTES:
-            raise HTTPException(status_code=413, detail="File too large")
+        if origin not in ALLOWED_ORIGINS:
+            raise HTTPException(
+                status_code=400,
+                detail=(
+                    f"Invalid origin '{origin}'. "
+                    f"Allowed: {sorted(ALLOWED_ORIGINS)}. "
+                    "field_validated is not accepted without an approved validation workflow."
+                ),
+            )
+        # Stream with running size cap (do not buffer unbounded then reject).
+        chunks: list[bytes] = []
+        total = 0
+        while True:
+            chunk = await file.read(1024 * 1024)
+            if not chunk:
+                break
+            total += len(chunk)
+            if total > MAX_UPLOAD_BYTES:
+                raise HTTPException(status_code=413, detail="File too large")
+            chunks.append(chunk)
+        raw = b"".join(chunks)
         try:
             df = pd.read_csv(io.BytesIO(raw))
             df = validate_frame(df, source=file.filename or "upload.csv")

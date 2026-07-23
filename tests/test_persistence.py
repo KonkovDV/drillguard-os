@@ -3,12 +3,17 @@ from drillguard.persistence import PersistenceConfig, PersistenceState, step_per
 
 def test_confirm_requires_duration():
     st = PersistenceState()
-    cfg = PersistenceConfig(confirm_seconds=5, transient_max_seconds=3)
+    cfg = PersistenceConfig(confirm_seconds=5, transient_max_seconds=3, min_points=3)
     labels = []
     for _ in range(3):
         st, lab, phase = step_persistence(st, "possible_packoff", 1.0, cfg)
         labels.append((lab, phase))
     assert labels[-1][1] == "candidate"
+    # A single huge Δt must not confirm without enough points
+    st2 = PersistenceState()
+    st2, lab2, phase2 = step_persistence(st2, "possible_packoff", 60.0, cfg)
+    assert phase2 == "candidate"
+    assert lab2 == "normal_noise"
     st, lab, phase = step_persistence(st, "possible_packoff", 1.0, cfg)
     st, lab, phase = step_persistence(st, "possible_packoff", 1.0, cfg)
     assert lab == "possible_packoff"

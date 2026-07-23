@@ -52,17 +52,24 @@ def test_benchmark_artifact_matches_manifest():
     assert b.get("claim_level") == "synthetic_only"
     assert b.get("requires_field_validation") is True
     assert len(b.get("cases", [])) == m["expected_benchmark_cases"]
+    assert b.get("n_cases") == m["expected_benchmark_cases"]
     assert b.get("n_scenarios") == m["expected_core_scenarios"]
     assert b.get("n_seeds") == m["expected_seeds"]
     assert "limitations_banner" in b
     # Appearance rate must not be the only/primary gate key
     assert "gates" in b
     assert b["gates"].get("event_appearance_rate_is_not_primary") is True
+    assert b["gates"].get("synthetic_only") is True
+    assert b["gates"].get("heuristic_score_not_probability") is True
     # Normal gate
     assert b["aggregate"]["normal_scenario_gate"]["all_zero_complication_fa"] is True
-    # Level separation present
+    # Level separation present; TN must be non-negative (no bitwise-~ on int masks)
     sample = b["cases"][0]
     assert "level_a" in sample and "level_b" in sample and "level_c" in sample
+    for case in b["cases"]:
+        tn = case.get("level_a", {}).get("tn")
+        if tn is not None:
+            assert int(tn) >= 0, case.get("scenario")
 
 
 def test_redteam_artifact_matches_manifest():

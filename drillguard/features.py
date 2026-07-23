@@ -33,20 +33,28 @@ FEATURE_CATALOG = {
 
 
 def add_features(df: pd.DataFrame, cfg: BaselineConfig | None = None) -> pd.DataFrame:
+    cfg = cfg or BaselineConfig()
     out = add_causal_baselines(df, cfg=cfg)
     flow = out["pump_flow_lpm"].clip(lower=1.0)
     out["pressure_per_flow"] = out["standpipe_pressure_kpa"] / flow
 
-    # Causal z for pressure_per_flow
-    from .baseline import causal_baseline_stats
+    # Same regime-run keys + candidate freeze as primary channels (no future leakage).
+    from .baseline import _regime_run_keys, causal_baseline_stats
     from .schema import NOISE_FLOOR
 
+    regimes = _regime_run_keys(out["regime"].to_numpy())
+    mask = (
+        out["baseline_frozen"].to_numpy(dtype=bool)
+        if cfg.freeze_on_candidate and "baseline_frozen" in out.columns
+        else None
+    )
     med, scale, z, hok = causal_baseline_stats(
         out["pressure_per_flow"].to_numpy(dtype=float),
-        out["regime"].to_numpy(),
-        cfg=cfg or BaselineConfig(),
+        regimes,
+        cfg=cfg,
         noise_floor=NOISE_FLOOR["standpipe_pressure_kpa"]
         / max(float(out["pump_flow_lpm"].median()), 1.0),
+        candidate_mask=mask,
     )
     out["pressure_per_flow_baseline"] = med
     out["pressure_per_flow_z"] = z
