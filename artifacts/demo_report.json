@@ -1,5 +1,5 @@
 {
-  "algorithm_version": "0.2.0",
+  "algorithm_version": "0.2.1",
   "scenario": "packoff",
   "data_origin": "synthetic",
   "source_id": "synthetic:packoff:seed=0",
@@ -8,7 +8,7 @@
   "summary": {
     "latest_event": "possible_packoff",
     "latest_heuristic_score": 0.8,
-    "latest_action": "Проверить циркуляцию, содержание шлама и признаки ухудшения очистки ствола (только проверка; без автоматических команд).",
+    "latest_action": "Кандидат на ухудшение очистки ствола или ограничение циркуляции. Проверить циркуляцию и шлам (только проверка; без автоматических команд).",
     "rows": 400,
     "quality_ok_pct": 100.0,
     "event_counts": {
@@ -18,7 +18,7 @@
       "normal_noise": 17,
       "short_transient": 1
     },
-    "algorithm_version": "0.2.0",
+    "algorithm_version": "0.2.1",
     "score_semantics": "heuristic_score_not_probability"
   },
   "event_cards": [
@@ -47,9 +47,9 @@
         "pressure_per_flow_z": 1.6128
       },
       "recommended_check": "Короткий выброс; наблюдать без эскалации.",
-      "unknowns": "Полевая точность не подтверждена.",
+      "unknowns": "Полевая точность не подтверждена (requires_field_validation).",
       "data_origin": "synthetic",
-      "algorithm_version": "0.2.0",
+      "algorithm_version": "0.2.1",
       "source_id": "synthetic:packoff:seed=0",
       "advisory_only": true,
       "no_control_actions": true
@@ -78,10 +78,10 @@
         "torque_drag_index": 4.8223,
         "pressure_per_flow_z": 0.9474
       },
-      "recommended_check": "Проверить циркуляцию, содержание шлама и признаки ухудшения очистки ствола (только проверка; без автоматических команд).",
+      "recommended_check": "Кандидат на ухудшение очистки ствола или ограничение циркуляции. Проверить циркуляцию и шлам (только проверка; без автоматических команд).",
       "unknowns": "Не модель шламовой пробки; эмпирический гидравлический экран.",
       "data_origin": "synthetic",
-      "algorithm_version": "0.2.0",
+      "algorithm_version": "0.2.1",
       "source_id": "synthetic:packoff:seed=0",
       "advisory_only": true,
       "no_control_actions": true
@@ -91,6 +91,7 @@
   "ground_truth": {
     "scenario": "packoff",
     "synthetic": true,
+    "data_origin": "synthetic",
     "seed": 0,
     "n": 400,
     "freq": "1s",
@@ -99,12 +100,21 @@
     "event_class": "possible_packoff",
     "event_start_idx": 180,
     "event_end_idx": 399,
+    "event_start_timestamp": "2026-01-01 00:03:00",
+    "event_end_timestamp": "2026-01-01 00:06:39",
     "channels_affected": [
       "standpipe_pressure_kpa",
       "pump_flow_lpm",
       "torque_knm"
     ],
+    "affected_channels": [
+      "standpipe_pressure_kpa",
+      "pump_flow_lpm",
+      "torque_knm"
+    ],
     "regime": "drilling",
+    "operation": "drilling",
+    "expected_action": "engineer_verification_only",
     "requires_field_validation": true,
     "claim_level": "synthetic_only"
   }

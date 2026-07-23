@@ -4,10 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "drillguard-os"
-version = "0.2.0"
+version = "0.2.1"
 description = "Local advisory drilling complication screening demonstrator (synthetic MVP)"
 readme = "README.md"
-license = { text = "Apache-2.0" }
+license = "Apache-2.0"
+license-files = ["LICENSE"]
 requires-python = ">=3.10"
 authors = [{ name = "DrillGuard OS contributors" }]
 keywords = ["drilling", "advisory", "hydraulics", "screening", "INDUSTRIX"]

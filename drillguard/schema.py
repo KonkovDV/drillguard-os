@@ -5,7 +5,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Any
 
-ALGORITHM_VERSION = "0.2.0"
+ALGORITHM_VERSION = "0.2.1"
 
 REQUIRED_COLUMNS = [
     "timestamp",
@@ -71,6 +71,24 @@ NOISE_FLOOR: dict[str, float] = {
     "rate_of_penetration_m_h": 0.5,
 }
 
+QUALITY_REASON_CODES = [
+    "ok",
+    "flagged_data_quality",
+    "missing_value",
+    "nonfinite_value",
+    "negative_physical_value",
+    "out_of_range",
+    "duplicate_timestamp",
+    "irregular_timebase",
+    "gap_in_timeline",
+    "flatline",
+    "stale_channel",
+    "unit_unknown",
+    "insufficient_history",
+    "regime_conflict",
+    "channel_desynchronized",
+]
+
 NUMERIC_REQUIRED = REQUIRED_COLUMNS[1:8]
 GOOD_QUALITY_TOKENS = frozenset({"ok", "good", "1", "true", "yes"})
 
@@ -84,20 +102,36 @@ class EventClass(str, Enum):
     SENSOR_QUALITY_ISSUE = "sensor_quality_issue"
     POSSIBLE_PACKOFF = "possible_packoff"
     POSSIBLE_LOST_CIRCULATION = "possible_lost_circulation"
-    POSSIBLE_INFLUX = "possible_influx"
+    # Strict naming: not a well-control diagnosis without pit/flow-out.
+    POSSIBLE_INFLUX_CANDIDATE = "possible_influx_candidate"
     TORQUE_DRAG_ANOMALY = "torque_drag_anomaly"
     SIGNAL_CONFLICT = "signal_conflict"
 
 
+# Level A — complication candidates only (not informational)
 COMPLICATION_CLASSES = frozenset(
     {
         EventClass.POSSIBLE_PACKOFF.value,
         EventClass.POSSIBLE_LOST_CIRCULATION.value,
-        EventClass.POSSIBLE_INFLUX.value,
+        EventClass.POSSIBLE_INFLUX_CANDIDATE.value,
         EventClass.TORQUE_DRAG_ANOMALY.value,
-        EventClass.SIGNAL_CONFLICT.value,
     }
 )
+
+INFORMATIONAL_LEVEL_B = frozenset(
+    {
+        EventClass.SENSOR_QUALITY_ISSUE.value,
+        EventClass.OPERATION_CHANGE.value,
+        EventClass.SIGNAL_CONFLICT.value,
+        EventClass.INSUFFICIENT_HISTORY.value,
+        EventClass.NORMAL_NOISE.value,
+        EventClass.SHORT_TRANSIENT.value,
+        EventClass.NONE.value,
+    }
+)
+
+# Backward-compatible alias rejected as primary label
+DEPRECATED_EVENT_ALIASES = {"possible_influx": EventClass.POSSIBLE_INFLUX_CANDIDATE.value}
 
 INFORMATIONAL_CLASSES = frozenset(
     {

@@ -36,7 +36,7 @@ def _sparkline_png(out: pd.DataFrame) -> str:
         [
             "possible_packoff",
             "possible_lost_circulation",
-            "possible_influx",
+            "possible_influx_candidate",
             "torque_drag_anomaly",
         ]
     )

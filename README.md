@@ -1,77 +1,39 @@
 # DrillGuard OS
 
-Локальная **рекомендательная** система скрининга **кандидатов** на осложнения при бурении по гидравлическим и механическим сигналам.
+Локальная **рекомендательная** система скрининга **кандидатов** на осложнения при бурении.
 
-**Версия:** 0.2.0 · **Статус:** воспроизводимый синтетический демонстратор (GitHub-ready).  
-**Не является** системой противоаварийной защиты, не управляет буровой, не пишет в АСУ ТП/SCADA, не заменяет инженера и **не заявляет полевую точность**.
+**Версия:** 0.2.1 · **Статус:** воспроизводимый **синтетический** демонстратор.  
+**Не является** ПАЗ / well-control системой, не управляет буровой, не пишет в АСУ ТП/SCADA, не заменяет инженера и **не заявляет полевую точность**.
 
-Результаты demo/benchmark помечены как `synthetic` / `requires_field_validation`, пока нет архива заказчика и разметки эксперта.
+Результаты demo/benchmark: `synthetic_only` + `requires_field_validation`.
 
-## Что делает
+## Главный принцип
 
-1. Проверяет схему и качество входных данных  
-2. Строит временную базу (сортировка, дубликаты, частота, пропуски)  
-3. Определяет режим операции и окно адаптации  
-4. Считает **причинную** режимную базовую линию (только прошлое; freeze при кандидате)  
-5. Формирует наблюдаемые и физически мотивированные признаки  
-6. Подтверждает устойчивые отклонения (persistence / hysteresis / cooldown)  
-7. Выдаёт объяснимую карточку события с `heuristic_score` (**не вероятность**)
+сигналы → качество → время → режим → **причинная** базовая линия → признаки → persistence → класс кандидата → карточка → архив → read-only shadow mode.
 
-### Классы v0.2
+## Метрики (важно)
 
-| Класс | Смысл |
-|-------|--------|
-| `possible_packoff` | Кандидат на ухудшение очистки / закупорку |
-| `possible_lost_circulation` | Кандидат на поглощение |
-| `possible_influx` | Кандидат на проявление (**неполон без pit/flow-out**) |
-| `torque_drag_anomaly` | Аномалия момента/нагрузки (упрощённый индекс, не 4DOF T&D) |
-| `sensor_quality_issue` | Проблема качества измерений |
-| `operation_change` | Смена операции (не осложнение) |
-| `short_transient` | Короткий выброс |
-| `normal_noise` / `insufficient_history` / `none` | Наблюдение / прогрев / нет события |
-| `signal_conflict` | Конфликт режима и сигналов |
+**Не используйте** rate появления класса / `compat_appearance_rate` как главный KPI.  
+Первичны: **Level A** F1 / precision / recall / detection delay / FA/h для осложнений; **Level B** interval-hit для `operation_change` и no-escalation для `short_transient`; **Level C** поток и quality.
+
+`heuristic_score` / `rule_score` / `screening_score` — **не вероятность**.
+
+`possible_influx_candidate` — **не** диагностика проявления без pit volume / flow-out.
 
 ## Быстрый старт
 
 ```bash
 pip install -e ".[dev]"
-python -m drillguard.cli demo --scenario packoff --output artifacts/demo_report.json --html artifacts/demo_report.html
+pytest -q
+python -m drillguard.cli demo --scenario packoff --html artifacts/demo_report.html
 python -m drillguard.cli benchmark --output artifacts/benchmark_results.json
 python -m benchmark.run_redteam
-pytest -q
 ```
 
-API (локально, read-only):
+## Документы
 
-```bash
-pip install -e ".[api]"
-uvicorn drillguard.api:create_app --factory --port 8000
-```
-
-Dashboard HTML:
-
-```bash
-pip install -e ".[dashboard]"
-python -c "from drillguard.dashboard import run_demo; print(run_demo())"
-```
-
-## Документация
-
-- [DATA_DICTIONARY.md](docs/DATA_DICTIONARY.md)
-- [PHYSICS_AND_ASSUMPTIONS.md](docs/PHYSICS_AND_ASSUMPTIONS.md)
-- [INDUSTRIX_APPLICATION_SYNC.md](docs/INDUSTRIX_APPLICATION_SYNC.md)
-- [PILOT_PLAN.md](docs/PILOT_PLAN.md)
-- [LIMITATIONS.md](docs/LIMITATIONS.md)
-- [VALIDATION_PROTOCOL.md](docs/VALIDATION_PROTOCOL.md)
-- [THREAT_MODEL.md](docs/THREAT_MODEL.md)
-- [REFERENCES.md](docs/REFERENCES.md)
-- [CHANGELOG.md](docs/CHANGELOG.md)
-
-## INDUSTRIX
-
-Рекомендуемое направление: бурение и внутрискважинные работы → цифровизация строительства/ремонта скважин.  
-Пилот: архив → shadow mode → memo. KPI согласуются **до** работ. Эффект — **гипотеза** до проверки.
+`docs/AUDIT_2026_07_23.md` · `DATA_DICTIONARY` · `PHYSICS_AND_ASSUMPTIONS` · `LIMITATIONS` · `VALIDATION_PROTOCOL` · `PILOT_PLAN` · `INDUSTRIX_APPLICATION_SYNC` · `THREAT_MODEL` · `REFERENCES` · `CHANGELOG` · `RELEASE_CHECKLIST`
 
 ## Лицензия
 
-Apache-2.0
+Apache-2.0 (полный текст в `LICENSE`)

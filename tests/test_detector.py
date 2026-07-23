@@ -11,9 +11,10 @@ def test_lost():
     df, _ = make_scenario("lost_circulation", seed=0)
     assert "possible_lost_circulation" in set(detect(df)["event"])
 
-def test_influx():
-    df, _ = make_scenario("influx", seed=0)
-    assert "possible_influx" in set(detect(df)["event"])
+def test_influx_candidate():
+    df, _ = make_scenario("influx_like", seed=0)
+    assert "possible_influx_candidate" in set(detect(df)["event"])
+    assert "possible_influx" not in set(detect(df)["event"])
 
 def test_torque():
     df, _ = make_scenario("torque", seed=0)

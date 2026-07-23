@@ -1,50 +1,336 @@
-<!DOCTYPE html>
-<html lang="ru"><head><meta charset="utf-8"/>
-<title>DrillGuard OS report</title>
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"/>
+<title>DrillGuard benchmark (synthetic)</title>
 <style>
-body{font-family:Segoe UI,Arial,sans-serif;margin:24px;color:#122}
+body{font-family:Segoe UI,Arial,sans-serif;margin:24px}
 .banner{background:#fff3cd;border:1px solid #856404;padding:12px;margin-bottom:16px}
-table{border-collapse:collapse;width:100%}
-th,td{border:1px solid #ccc;padding:6px;font-size:13px;vertical-align:top}
-th{background:#f4f4f4;text-align:left}
-.meta{color:#555;font-size:13px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{border:1px solid #ccc;padding:6px} th{background:#f4f4f4}
 </style></head><body>
-<div class="banner"><strong>Synthetic benchmark only. Not field accuracy.</strong></div>
-<h1>DrillGuard OS — event cards</h1>
-<p class="meta">version=0.2.0
- | origin=synthetic
- | source=benchmark
- | score=n/a</p>
+<div class="banner"><strong>LIMITATIONS FIRST.</strong> SYNTHETIC ONLY. Not field accuracy. event appearance rate is demoted and must not be used as the headline KPI. possible_influx_candidate is not well-control diagnosis. Requires labeled archive + temporal holdout for any field claim.</div>
+<p>algorithm=0.2.1 · claim_level=synthetic_only · requires_field_validation=true</p>
+<p>Primary metrics are Level A F1/delay/FA — not appearance rates.</p>
 <pre>{
-  &quot;n_cases&quot;: 45,
-  &quot;event_hit_rate&quot;: 1.0,
-  &quot;f1&quot;: {
-    &quot;mean&quot;: 0.8021688888888889,
-    &quot;p05&quot;: 0.0482,
-    &quot;median&quot;: 0.9398,
-    &quot;p95&quot;: 1.0,
-    &quot;worst&quot;: 0.0482
-  },
-  &quot;detection_delay_s&quot;: {
-    &quot;mean&quot;: 18.2,
-    &quot;p05&quot;: 0.0,
-    &quot;median&quot;: 22.0,
-    &quot;p95&quot;: 36.3,
-    &quot;worst&quot;: 40.0
-  },
-  &quot;false_alarms_per_hour&quot;: {
-    &quot;mean&quot;: 0.0,
-    &quot;p05&quot;: 0.0,
-    &quot;median&quot;: 0.0,
-    &quot;p95&quot;: 0.0,
-    &quot;worst&quot;: 0.0
-  },
+  &quot;n_cases&quot;: 50,
   &quot;claim_level&quot;: &quot;synthetic_only&quot;,
-  &quot;requires_field_validation&quot;: true
+  &quot;requires_field_validation&quot;: true,
+  &quot;primary_metrics_note&quot;: &quot;Do not advertise compat event-appearance rates as readiness. Primary: Level A F1/precision/recall/delay/FA/h; Level B interval logic; Level C stream FA.&quot;,
+  &quot;per_class&quot;: {
+    &quot;none&quot;: {
+      &quot;n&quot;: 10,
+      &quot;f1&quot;: {
+        &quot;mean&quot;: 0.0,
+        &quot;min&quot;: 0.0,
+        &quot;median&quot;: 0.0,
+        &quot;max&quot;: 0.0,
+        &quot;p05&quot;: 0.0,
+        &quot;p95&quot;: 0.0
+      },
+      &quot;detection_delay_s&quot;: {
+        &quot;mean&quot;: null,
+        &quot;min&quot;: null,
+        &quot;median&quot;: null,
+        &quot;max&quot;: null
+      },
+      &quot;false_alarms_per_hour&quot;: {
+        &quot;mean&quot;: 0.0,
+        &quot;min&quot;: 0.0,
+        &quot;median&quot;: 0.0,
+        &quot;max&quot;: 0.0
+      },
+      &quot;rate_expected_class_appeared&quot;: 1.0,
+      &quot;rate_latest_equals_truth&quot;: 1.0,
+      &quot;note&quot;: &quot;rate_expected_class_appeared is NOT a primary quality metric; prefer Level A F1/delay/FA for complications and Level B interval hits for informational.&quot;
+    },
+    &quot;possible_packoff&quot;: {
+      &quot;n&quot;: 5,
+      &quot;f1&quot;: {
+        &quot;mean&quot;: 0.9381600000000001,
+        &quot;min&quot;: 0.9242,
+        &quot;median&quot;: 0.9398,
+        &quot;max&quot;: 0.9474,
+        &quot;p05&quot;: 0.92628,
+        &quot;p95&quot;: 0.94688
+      },
+      &quot;detection_delay_s&quot;: {
+        &quot;mean&quot;: 25.6,
+        &quot;min&quot;: 22.0,
+        &quot;median&quot;: 25.0,
+        &quot;max&quot;: 31.0
+      },
+      &quot;false_alarms_per_hour&quot;: {
+        &quot;mean&quot;: 0.0,
+        &quot;min&quot;: 0.0,
+        &quot;median&quot;: 0.0,
+        &quot;max&quot;: 0.0
+      },
+      &quot;rate_expected_class_appeared&quot;: 1.0,
+      &quot;rate_latest_equals_truth&quot;: 1.0,
+      &quot;note&quot;: &quot;rate_expected_class_appeared is NOT a primary quality metric; prefer Level A F1/delay/FA for complications and Level B interval hits for informational.&quot;
+    },
+    &quot;possible_lost_circulation&quot;: {
+      &quot;n&quot;: 5,
+      &quot;f1&quot;: {
+        &quot;mean&quot;: 0.9340400000000001,
+        &quot;min&quot;: 0.9163,
+        &quot;median&quot;: 0.9372,
+        &quot;max&quot;: 0.9423,
+        &quot;p05&quot;: 0.91996,
+        &quot;p95&quot;: 0.9418
+      },
+      &quot;detection_delay_s&quot;: {
+        &quot;mean&quot;: 27.2,
+        &quot;min&quot;: 24.0,
+        &quot;median&quot;: 26.0,
+        &quot;max&quot;: 34.0
+      },
+      &quot;false_alarms_per_hour&quot;: {
+        &quot;mean&quot;: 0.0,
+        &quot;min&quot;: 0.0,
+        &quot;median&quot;: 0.0,
+        &quot;max&quot;: 0.0
+      },
+      &quot;rate_expected_class_appeared&quot;: 1.0,
+      &quot;rate_latest_equals_truth&quot;: 1.0,
+      &quot;note&quot;: &quot;rate_expected_class_appeared is NOT a primary quality metric; prefer Level A F1/delay/FA for complications and Level B interval hits for informational.&quot;
+    },
+    &quot;possible_influx_candidate&quot;: {
+      &quot;n&quot;: 5,
+      &quot;f1&quot;: {
+        &quot;mean&quot;: 0.9124599999999999,
+        &quot;min&quot;: 0.9,
+        &quot;median&quot;: 0.9109,
+        &quot;max&quot;: 0.9216,
+        &quot;p05&quot;: 0.90164,
+        &quot;p95&quot;: 0.9216
+      },
+      &quot;detection_delay_s&quot;: {
+        &quot;mean&quot;: 35.4,
+        &quot;min&quot;: 32.0,
+        &quot;median&quot;: 36.0,
+        &quot;max&quot;: 40.0
+      },
+      &quot;false_alarms_per_hour&quot;: {
+        &quot;mean&quot;: 0.0,
+        &quot;min&quot;: 0.0,
+        &quot;median&quot;: 0.0,
+        &quot;max&quot;: 0.0
+      },
+      &quot;rate_expected_class_appeared&quot;: 1.0,
+      &quot;rate_latest_equals_truth&quot;: 1.0,
+      &quot;note&quot;: &quot;rate_expected_class_appeared is NOT a primary quality metric; prefer Level A F1/delay/FA for complications and Level B interval hits for informational.&quot;
+    },
+    &quot;ballooning_like&quot;: {
+      &quot;n&quot;: 5,
+      &quot;f1&quot;: {
+        &quot;mean&quot;: 0.0,
+        &quot;min&quot;: 0.0,
+        &quot;median&quot;: 0.0,
+        &quot;max&quot;: 0.0,
+        &quot;p05&quot;: 0.0,
+        &quot;p95&quot;: 0.0
+      },
+      &quot;detection_delay_s&quot;: {
+        &quot;mean&quot;: null,
+        &quot;min&quot;: null,
+        &quot;median&quot;: null,
+        &quot;max&quot;: null
+      },
+      &quot;false_alarms_per_hour&quot;: {
+        &quot;mean&quot;: 833.6842105263158,
+        &quot;min&quot;: 757.8947368421052,
+        &quot;median&quot;: 848.1203007518797,
+        &quot;max&quot;: 911.2781954887217
+      },
+      &quot;rate_expected_class_appeared&quot;: 0.0,
+      &quot;rate_latest_equals_truth&quot;: 0.0,
+      &quot;note&quot;: &quot;rate_expected_class_appeared is NOT a primary quality metric; prefer Level A F1/delay/FA for complications and Level B interval hits for informational.&quot;
+    },
+    &quot;torque_drag_anomaly&quot;: {
+      &quot;n&quot;: 5,
+      &quot;f1&quot;: {
+        &quot;mean&quot;: 0.94686,
+        &quot;min&quot;: 0.9398,
+        &quot;median&quot;: 0.9474,
+        &quot;max&quot;: 0.9524,
+        &quot;p05&quot;: 0.9408,
+        &quot;p95&quot;: 0.9519
+      },
+      &quot;detection_delay_s&quot;: {
+        &quot;mean&quot;: 22.2,
+        &quot;min&quot;: 20.0,
+        &quot;median&quot;: 22.0,
+        &quot;max&quot;: 25.0
+      },
+      &quot;false_alarms_per_hour&quot;: {
+        &quot;mean&quot;: 0.0,
+        &quot;min&quot;: 0.0,
+        &quot;median&quot;: 0.0,
+        &quot;max&quot;: 0.0
+      },
+      &quot;rate_expected_class_appeared&quot;: 1.0,
+      &quot;rate_latest_equals_truth&quot;: 1.0,
+      &quot;note&quot;: &quot;rate_expected_class_appeared is NOT a primary quality metric; prefer Level A F1/delay/FA for complications and Level B interval hits for informational.&quot;
+    },
+    &quot;operation_change&quot;: {
+      &quot;n&quot;: 5,
+      &quot;f1&quot;: {
+        &quot;mean&quot;: null,
+        &quot;min&quot;: null,
+        &quot;median&quot;: null,
+        &quot;max&quot;: null,
+        &quot;p05&quot;: null,
+        &quot;p95&quot;: null
+      },
+      &quot;detection_delay_s&quot;: {
+        &quot;mean&quot;: null,
+        &quot;min&quot;: null,
+        &quot;median&quot;: null,
+        &quot;max&quot;: null
+      },
+      &quot;false_alarms_per_hour&quot;: {
+        &quot;mean&quot;: 0.0,
+        &quot;min&quot;: 0.0,
+        &quot;median&quot;: 0.0,
+        &quot;max&quot;: 0.0
+      },
+      &quot;rate_expected_class_appeared&quot;: 1.0,
+      &quot;rate_latest_equals_truth&quot;: 0.0,
+      &quot;note&quot;: &quot;rate_expected_class_appeared is NOT a primary quality metric; prefer Level A F1/delay/FA for complications and Level B interval hits for informational.&quot;
+    },
+    &quot;sensor_quality_issue&quot;: {
+      &quot;n&quot;: 5,
+      &quot;f1&quot;: {
+        &quot;mean&quot;: null,
+        &quot;min&quot;: null,
+        &quot;median&quot;: null,
+        &quot;max&quot;: null,
+        &quot;p05&quot;: null,
+        &quot;p95&quot;: null
+      },
+      &quot;detection_delay_s&quot;: {
+        &quot;mean&quot;: null,
+        &quot;min&quot;: null,
+        &quot;median&quot;: null,
+        &quot;max&quot;: null
+      },
+      &quot;false_alarms_per_hour&quot;: {
+        &quot;mean&quot;: 0.0,
+        &quot;min&quot;: 0.0,
+        &quot;median&quot;: 0.0,
+        &quot;max&quot;: 0.0
+      },
+      &quot;rate_expected_class_appeared&quot;: 1.0,
+      &quot;rate_latest_equals_truth&quot;: 0.0,
+      &quot;note&quot;: &quot;rate_expected_class_appeared is NOT a primary quality metric; prefer Level A F1/delay/FA for complications and Level B interval hits for informational.&quot;
+    },
+    &quot;short_transient&quot;: {
+      &quot;n&quot;: 5,
+      &quot;f1&quot;: {
+        &quot;mean&quot;: null,
+        &quot;min&quot;: null,
+        &quot;median&quot;: null,
+        &quot;max&quot;: null,
+        &quot;p05&quot;: null,
+        &quot;p95&quot;: null
+      },
+      &quot;detection_delay_s&quot;: {
+        &quot;mean&quot;: null,
+        &quot;min&quot;: null,
+        &quot;median&quot;: null,
+        &quot;max&quot;: null
+      },
+      &quot;false_alarms_per_hour&quot;: {
+        &quot;mean&quot;: 0.0,
+        &quot;min&quot;: 0.0,
+        &quot;median&quot;: 0.0,
+        &quot;max&quot;: 0.0
+      },
+      &quot;rate_expected_class_appeared&quot;: 1.0,
+      &quot;rate_latest_equals_truth&quot;: 0.0,
+      &quot;note&quot;: &quot;rate_expected_class_appeared is NOT a primary quality metric; prefer Level A F1/delay/FA for complications and Level B interval hits for informational.&quot;
+    }
+  },
+  &quot;normal_scenario_gate&quot;: {
+    &quot;n&quot;: 10,
+    &quot;all_zero_complication_fa&quot;: true,
+    &quot;per_seed&quot;: [
+      {
+        &quot;scenario&quot;: &quot;normal&quot;,
+        &quot;seed&quot;: 0,
+        &quot;false_alarm_rows&quot;: 0,
+        &quot;false_alarms_per_hour&quot;: 0.0,
+        &quot;latest_event&quot;: &quot;none&quot;
+      },
+      {
+        &quot;scenario&quot;: &quot;high_noise&quot;,
+        &quot;seed&quot;: 0,
+        &quot;false_alarm_rows&quot;: 0,
+        &quot;false_alarms_per_hour&quot;: 0.0,
+        &quot;latest_event&quot;: &quot;none&quot;
+      },
+      {
+        &quot;scenario&quot;: &quot;normal&quot;,
+        &quot;seed&quot;: 1,
+        &quot;false_alarm_rows&quot;: 0,
+        &quot;false_alarms_per_hour&quot;: 0.0,
+        &quot;latest_event&quot;: &quot;none&quot;
+      },
+      {
+        &quot;scenario&quot;: &quot;high_noise&quot;,
+        &quot;seed&quot;: 1,
+        &quot;false_alarm_rows&quot;: 0,
+        &quot;false_alarms_per_hour&quot;: 0.0,
+        &quot;latest_event&quot;: &quot;none&quot;
+      },
+      {
+        &quot;scenario&quot;: &quot;normal&quot;,
+        &quot;seed&quot;: 2,
+        &quot;false_alarm_rows&quot;: 0,
+        &quot;false_alarms_per_hour&quot;: 0.0,
+        &quot;latest_event&quot;: &quot;none&quot;
+      },
+      {
+        &quot;scenario&quot;: &quot;high_noise&quot;,
+        &quot;seed&quot;: 2,
+        &quot;false_alarm_rows&quot;: 0,
+        &quot;false_alarms_per_hour&quot;: 0.0,
+        &quot;latest_event&quot;: &quot;none&quot;
+      },
+      {
+        &quot;scenario&quot;: &quot;normal&quot;,
+        &quot;seed&quot;: 3,
+        &quot;false_alarm_rows&quot;: 0,
+        &quot;false_alarms_per_hour&quot;: 0.0,
+        &quot;latest_event&quot;: &quot;none&quot;
+      },
+      {
+        &quot;scenario&quot;: &quot;high_noise&quot;,
+        &quot;seed&quot;: 3,
+        &quot;false_alarm_rows&quot;: 0,
+        &quot;false_alarms_per_hour&quot;: 0.0,
+        &quot;latest_event&quot;: &quot;none&quot;
+      },
+      {
+        &quot;scenario&quot;: &quot;normal&quot;,
+        &quot;seed&quot;: 4,
+        &quot;false_alarm_rows&quot;: 0,
+        &quot;false_alarms_per_hour&quot;: 0.0,
+        &quot;latest_event&quot;: &quot;none&quot;
+      },
+      {
+        &quot;scenario&quot;: &quot;high_noise&quot;,
+        &quot;seed&quot;: 4,
+        &quot;false_alarm_rows&quot;: 0,
+        &quot;false_alarms_per_hour&quot;: 0.0,
+        &quot;latest_event&quot;: &quot;none&quot;
+      }
+    ]
+  },
+  &quot;operation_change_interval_hit_rate&quot;: 1.0,
+  &quot;short_transient_no_escalation_rate&quot;: 1.0,
+  &quot;compat_appearance_rate_demoted&quot;: 0.9
 }</pre>
-<table>
-<thead><tr><th>Start</th><th>Class</th><th>Score</th><th>Regime</th><th>Check</th><th>Unknowns</th></tr></thead>
-<tbody>
-<tr><td>seed=0</td><td>normal</td><td>1.0</td><td>none</td><td>hit=True delay=None</td><td>FA/h=0.0</td></tr><tr><td>seed=0</td><td>packoff</td><td>0.9242</td><td>possible_packoff</td><td>hit=True delay=31.0</td><td>FA/h=0.0</td></tr><tr><td>seed=0</td><td>lost_circulation</td><td>0.9163</td><td>possible_lost_circulation</td><td>hit=True delay=34.0</td><td>FA/h=0.0</td></tr><tr><td>seed=0</td><td>influx</td><td>0.9</td><td>possible_influx</td><td>hit=True delay=40.0</td><td>FA/h=0.0</td></tr><tr><td>seed=0</td><td>torque</td><td>0.9398</td><td>torque_drag_anomaly</td><td>hit=True delay=25.0</td><td>FA/h=0.0</td></tr><tr><td>seed=0</td><td>connection</td><td>0.0482</td><td>operation_change</td><td>hit=True delay=0.0</td><td>FA/h=0.0</td></tr><tr><td>seed=0</td><td>sensor_fault_flatline</td><td>0.9398</td><td>sensor_quality_issue</td><td>hit=True delay=15.0</td><td>FA/h=0.0</td></tr><tr><td>seed=0</td><td>short_transient_only</td><td>0.5</td><td>short_transient</td><td>hit=True delay=2.0</td><td>FA/h=0.0</td></tr><tr><td>seed=0</td><td>high_noise</td><td>1.0</td><td>none</td><td>hit=True delay=None</td><td>FA/h=0.0</td></tr><tr><td>seed=1</td><td>normal</td><td>1.0</td><td>none</td><td>hit=True delay=None</td><td>FA/h=0.0</td></tr><tr><td>seed=1</td><td>packoff</td><td>0.9346</td><td>possible_packoff</td><td>hit=True delay=27.0</td><td>FA/h=0.0</td></tr><tr><td>seed=1</td><td>lost_circulation</td><td>0.9398</td><td>possible_lost_circulation</td><td>hit=True delay=25.0</td><td>FA/h=0.0</td></tr><tr><td>seed=1</td><td>influx</td><td>0.9216</td><td>possible_influx</td><td>hit=True delay=32.0</td><td>FA/h=0.0</td></tr><tr><td>seed=1</td><td>torque</td><td>0.9474</td><td>torque_drag_anomaly</td><td>hit=True delay=22.0</td><td>FA/h=0.0</td></tr><tr><td>seed=1</td><td>connection</td><td>0.0482</td><td>operation_change</td><td>hit=True delay=0.0</td><td>FA/h=0.0</td></tr><tr><td>seed=1</td><td>sensor_fault_flatline</td><td>0.9398</td><td>sensor_quality_issue</td><td>hit=True delay=15.0</td><td>FA/h=0.0</td></tr><tr><td>seed=1</td><td>short_transient_only</td><td>0.5</td><td>short_transient</td><td>hit=True delay=2.0</td><td>FA/h=0.0</td></tr><tr><td>seed=1</td><td>high_noise</td><td>1.0</td><td>none</td><td>hit=True delay=None</td><td>FA/h=0.0</td></tr><tr><td>seed=2</td><td>normal</td><td>1.0</td><td>none</td><td>hit=True delay=None</td><td>FA/h=0.0</td></tr><tr><td>seed=2</td><td>packoff</td><td>0.9474</td><td>possible_packoff</td><td>hit=True delay=22.0</td><td>FA/h=0.0</td></tr><tr><td>seed=2</td><td>lost_circulation</td><td>0.9346</td><td>possible_lost_circulation</td><td>hit=True delay=27.0</td><td>FA/h=0.0</td></tr><tr><td>seed=2</td><td>influx</td><td>0.9216</td><td>possible_influx</td><td>hit=True delay=32.0</td><td>FA/h=0.0</td></tr><tr><td>seed=2</td><td>torque</td><td>0.9499</td><td>torque_drag_anomaly</td><td>hit=True delay=21.0</td><td>FA/h=0.0</td></tr><tr><td>seed=2</td><td>connection</td><td>0.0482</td><td>operation_change</td><td>hit=True delay=0.0</td><td>FA/h=0.0</td></tr><tr><td>seed=2</td><td>sensor_fault_flatline</td><td>0.9398</td><td>sensor_quality_issue</td><td>hit=True delay=15.0</td><td>FA/h=0.0</td></tr><tr><td>seed=2</td><td>short_transient_only</td><td>0.5</td><td>short_transient</td><td>hit=True delay=2.0</td><td>FA/h=0.0</td></tr><tr><td>seed=2</td><td>high_noise</td><td>1.0</td><td>none</td><td>hit=True delay=None</td><td>FA/h=0.0</td></tr><tr><td>seed=3</td><td>normal</td><td>1.0</td><td>none</td><td>hit=True delay=None</td><td>FA/h=0.0</td></tr><tr><td>seed=3</td><td>packoff</td><td>0.9398</td><td>possible_packoff</td><td>hit=True delay=25.0</td><td>FA/h=0.0</td></tr><tr><td>seed=3</td><td>lost_circulation</td><td>0.9372</td><td>possible_lost_circulation</td><td>hit=True delay=26.0</td><td>FA/h=0.0</td></tr><tr><td>seed=3</td><td>influx</td><td>0.9082</td><td>possible_influx</td><td>hit=True delay=37.0</td><td>FA/h=0.0</td></tr><tr><td>seed=3</td><td>torque</td><td>0.9448</td><td>torque_drag_anomaly</td><td>hit=True delay=23.0</td><td>FA/h=0.0</td></tr><tr><td>seed=3</td><td>connection</td><td>0.0482</td><td>operation_change</td><td>hit=True delay=0.0</td><td>FA/h=0.0</td></tr><tr><td>seed=3</td><td>sensor_fault_flatline</td><td>0.9398</td><td>sensor_quality_issue</td><td>hit=True delay=15.0</td><td>FA/h=0.0</td></tr><tr><td>seed=3</td><td>short_transient_only</td><td>0.5</td><td>short_transient</td><td>hit=True delay=2.0</td><td>FA/h=0.0</td></tr><tr><td>seed=3</td><td>high_noise</td><td>1.0</td><td>none</td><td>hit=True delay=None</td><td>FA/h=0.0</td></tr><tr><td>seed=4</td><td>normal</td><td>1.0</td><td>none</td><td>hit=True delay=None</td><td>FA/h=0.0</td></tr><tr><td>seed=4</td><td>packoff</td><td>0.9448</td><td>possible_packoff</td><td>hit=True delay=23.0</td><td>FA/h=0.0</td></tr><tr><td>seed=4</td><td>lost_circulation</td><td>0.9423</td><td>possible_lost_circulation</td><td>hit=True delay=24.0</td><td>FA/h=0.0</td></tr><tr><td>seed=4</td><td>influx</td><td>0.9109</td><td>possible_influx</td><td>hit=True delay=36.0</td><td>FA/h=0.0</td></tr><tr><td>seed=4</td><td>torque</td><td>0.9524</td><td>torque_drag_anomaly</td><td>hit=True delay=20.0</td><td>FA/h=0.0</td></tr><tr><td>seed=4</td><td>connection</td><td>0.0482</td><td>operation_change</td><td>hit=True delay=0.0</td><td>FA/h=0.0</td></tr><tr><td>seed=4</td><td>sensor_fault_flatline</td><td>0.9398</td><td>sensor_quality_issue</td><td>hit=True delay=15.0</td><td>FA/h=0.0</td></tr><tr><td>seed=4</td><td>short_transient_only</td><td>0.5</td><td>short_transient</td><td>hit=True delay=2.0</td><td>FA/h=0.0</td></tr><tr><td>seed=4</td><td>high_noise</td><td>1.0</td><td>none</td><td>hit=True delay=None</td><td>FA/h=0.0</td></tr>
-</tbody></table>
+<table><thead><tr>
+<th>scenario</th><th>seed</th><th>truth</th><th>A_f1</th><th>A_prec</th><th>A_rec</th><th>delay_s</th><th>FA/h</th><th>latest</th>
+</tr></thead><tbody><tr><td>normal</td><td>0</td><td>none</td><td>0.0</td><td>0.0</td><td>0.0</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>packoff</td><td>0</td><td>possible_packoff</td><td>0.9242</td><td>1.0</td><td>0.8591</td><td>31.0</td><td>0.0</td><td>possible_packoff</td></tr><tr><td>lost_circulation</td><td>0</td><td>possible_lost_circulation</td><td>0.9163</td><td>1.0</td><td>0.8455</td><td>34.0</td><td>0.0</td><td>possible_lost_circulation</td></tr><tr><td>influx_like</td><td>0</td><td>possible_influx_candidate</td><td>0.9</td><td>1.0</td><td>0.8182</td><td>40.0</td><td>0.0</td><td>possible_influx_candidate</td></tr><tr><td>ballooning_like</td><td>0</td><td>ballooning_like</td><td>0.0</td><td>0.0</td><td>0.0</td><td>None</td><td>866.1654135338346</td><td>possible_influx_candidate</td></tr><tr><td>torque</td><td>0</td><td>torque_drag_anomaly</td><td>0.9398</td><td>1.0</td><td>0.8864</td><td>25.0</td><td>0.0</td><td>torque_drag_anomaly</td></tr><tr><td>connection</td><td>0</td><td>operation_change</td><td>None</td><td>None</td><td>None</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>sensor_fault_flatline</td><td>0</td><td>sensor_quality_issue</td><td>None</td><td>None</td><td>None</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>short_transient_only</td><td>0</td><td>short_transient</td><td>None</td><td>None</td><td>None</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>high_noise</td><td>0</td><td>none</td><td>0.0</td><td>0.0</td><td>0.0</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>normal</td><td>1</td><td>none</td><td>0.0</td><td>0.0</td><td>0.0</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>packoff</td><td>1</td><td>possible_packoff</td><td>0.9346</td><td>1.0</td><td>0.8773</td><td>27.0</td><td>0.0</td><td>possible_packoff</td></tr><tr><td>lost_circulation</td><td>1</td><td>possible_lost_circulation</td><td>0.9398</td><td>1.0</td><td>0.8864</td><td>25.0</td><td>0.0</td><td>possible_lost_circulation</td></tr><tr><td>influx_like</td><td>1</td><td>possible_influx_candidate</td><td>0.9216</td><td>1.0</td><td>0.8545</td><td>32.0</td><td>0.0</td><td>possible_influx_candidate</td></tr><tr><td>ballooning_like</td><td>1</td><td>ballooning_like</td><td>0.0</td><td>0.0</td><td>0.0</td><td>None</td><td>784.9624060150376</td><td>possible_influx_candidate</td></tr><tr><td>torque</td><td>1</td><td>torque_drag_anomaly</td><td>0.9474</td><td>1.0</td><td>0.9</td><td>22.0</td><td>0.0</td><td>torque_drag_anomaly</td></tr><tr><td>connection</td><td>1</td><td>operation_change</td><td>None</td><td>None</td><td>None</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>sensor_fault_flatline</td><td>1</td><td>sensor_quality_issue</td><td>None</td><td>None</td><td>None</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>short_transient_only</td><td>1</td><td>short_transient</td><td>None</td><td>None</td><td>None</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>high_noise</td><td>1</td><td>none</td><td>0.0</td><td>0.0</td><td>0.0</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>normal</td><td>2</td><td>none</td><td>0.0</td><td>0.0</td><td>0.0</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>packoff</td><td>2</td><td>possible_packoff</td><td>0.9474</td><td>1.0</td><td>0.9</td><td>22.0</td><td>0.0</td><td>possible_packoff</td></tr><tr><td>lost_circulation</td><td>2</td><td>possible_lost_circulation</td><td>0.9346</td><td>1.0</td><td>0.8773</td><td>27.0</td><td>0.0</td><td>possible_lost_circulation</td></tr><tr><td>influx_like</td><td>2</td><td>possible_influx_candidate</td><td>0.9216</td><td>1.0</td><td>0.8545</td><td>32.0</td><td>0.0</td><td>possible_influx_candidate</td></tr><tr><td>ballooning_like</td><td>2</td><td>ballooning_like</td><td>0.0</td><td>0.0</td><td>0.0</td><td>None</td><td>911.2781954887217</td><td>possible_influx_candidate</td></tr><tr><td>torque</td><td>2</td><td>torque_drag_anomaly</td><td>0.9499</td><td>1.0</td><td>0.9045</td><td>21.0</td><td>0.0</td><td>torque_drag_anomaly</td></tr><tr><td>connection</td><td>2</td><td>operation_change</td><td>None</td><td>None</td><td>None</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>sensor_fault_flatline</td><td>2</td><td>sensor_quality_issue</td><td>None</td><td>None</td><td>None</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>short_transient_only</td><td>2</td><td>short_transient</td><td>None</td><td>None</td><td>None</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>high_noise</td><td>2</td><td>none</td><td>0.0</td><td>0.0</td><td>0.0</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>normal</td><td>3</td><td>none</td><td>0.0</td><td>0.0</td><td>0.0</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>packoff</td><td>3</td><td>possible_packoff</td><td>0.9398</td><td>1.0</td><td>0.8864</td><td>25.0</td><td>0.0</td><td>possible_packoff</td></tr><tr><td>lost_circulation</td><td>3</td><td>possible_lost_circulation</td><td>0.9372</td><td>1.0</td><td>0.8818</td><td>26.0</td><td>0.0</td><td>possible_lost_circulation</td></tr><tr><td>influx_like</td><td>3</td><td>possible_influx_candidate</td><td>0.9082</td><td>1.0</td><td>0.8318</td><td>37.0</td><td>0.0</td><td>possible_influx_candidate</td></tr><tr><td>ballooning_like</td><td>3</td><td>ballooning_like</td><td>0.0</td><td>0.0</td><td>0.0</td><td>None</td><td>848.1203007518797</td><td>possible_influx_candidate</td></tr><tr><td>torque</td><td>3</td><td>torque_drag_anomaly</td><td>0.9448</td><td>1.0</td><td>0.8955</td><td>23.0</td><td>0.0</td><td>torque_drag_anomaly</td></tr><tr><td>connection</td><td>3</td><td>operation_change</td><td>None</td><td>None</td><td>None</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>sensor_fault_flatline</td><td>3</td><td>sensor_quality_issue</td><td>None</td><td>None</td><td>None</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>short_transient_only</td><td>3</td><td>short_transient</td><td>None</td><td>None</td><td>None</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>high_noise</td><td>3</td><td>none</td><td>0.0</td><td>0.0</td><td>0.0</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>normal</td><td>4</td><td>none</td><td>0.0</td><td>0.0</td><td>0.0</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>packoff</td><td>4</td><td>possible_packoff</td><td>0.9448</td><td>1.0</td><td>0.8955</td><td>23.0</td><td>0.0</td><td>possible_packoff</td></tr><tr><td>lost_circulation</td><td>4</td><td>possible_lost_circulation</td><td>0.9423</td><td>1.0</td><td>0.8909</td><td>24.0</td><td>0.0</td><td>possible_lost_circulation</td></tr><tr><td>influx_like</td><td>4</td><td>possible_influx_candidate</td><td>0.9109</td><td>1.0</td><td>0.8364</td><td>36.0</td><td>0.0</td><td>possible_influx_candidate</td></tr><tr><td>ballooning_like</td><td>4</td><td>ballooning_like</td><td>0.0</td><td>0.0</td><td>0.0</td><td>None</td><td>757.8947368421052</td><td>possible_influx_candidate</td></tr><tr><td>torque</td><td>4</td><td>torque_drag_anomaly</td><td>0.9524</td><td>1.0</td><td>0.9091</td><td>20.0</td><td>0.0</td><td>torque_drag_anomaly</td></tr><tr><td>connection</td><td>4</td><td>operation_change</td><td>None</td><td>None</td><td>None</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>sensor_fault_flatline</td><td>4</td><td>sensor_quality_issue</td><td>None</td><td>None</td><td>None</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>short_transient_only</td><td>4</td><td>short_transient</td><td>None</td><td>None</td><td>None</td><td>None</td><td>0.0</td><td>none</td></tr><tr><td>high_noise</td><td>4</td><td>none</td><td>0.0</td><td>0.0</td><td>0.0</td><td>None</td><td>0.0</td><td>none</td></tr></tbody></table>
 </body></html>

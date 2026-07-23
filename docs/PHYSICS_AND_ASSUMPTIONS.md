@@ -13,8 +13,8 @@
 
 - DrillGuard OS **is not** a hydraulic transient model.
 - `torque_drag_index` **is not** the SPE open-source 4DOF T&D model (Cayeux et al., 2026).
-- `possible_influx` without pit/flow-out is a **hypothesis screen** only.
-- Ballooning vs kick discrimination is **out of scope** until flow-out/pit channels exist.
+- `possible_influx_candidate` without pit/flow-out is a **hypothesis screen** only — not well-control diagnosis.
+- Ballooning may look similar to an influx-like pressure/flow pattern.
 
 ## Units and noise floors
 

@@ -1,22 +1,24 @@
 {
+  "algorithm_version": "0.2.1",
   "claim_level": "synthetic_adversarial_probes",
+  "scope": "local synthetic/robustness gates — not a full OT red-team",
+  "n_probes": 12,
+  "n_hard_gates": 11,
   "probes": [
     {
-      "name": "baseline_causality_packoff",
-      "history_ok_at_mid": true,
-      "has_baseline_col": true,
-      "pass": true
+      "name": "baseline_prefix_equals_full",
+      "pass": true,
+      "hard": true
     },
     {
-      "name": "no_shuffle_validation_policy",
-      "policy": "Temporal holdout only; random shuffle of time series is forbidden for quality claims.",
-      "pass": true
+      "name": "future_mutation_no_past_change",
+      "pass": true,
+      "hard": true
     },
     {
       "name": "negative_flow_quality_gate",
-      "quality_ok_any": false,
-      "sensor_or_conflict": true,
-      "pass": true
+      "pass": true,
+      "hard": true
     },
     {
       "name": "normal_complication_rows",
@@ -27,14 +29,50 @@
         0,
         0
       ],
-      "max": 0,
-      "pass": true
+      "pass": true,
+      "hard": true
     },
     {
-      "name": "ballooning_like_may_look_like_influx",
-      "latest": "possible_influx",
-      "note": "Hypothesis: without pit/flow-out, ballooning can be misread as influx. Requires field validation.",
-      "pass": true
+      "name": "flatline_not_packoff",
+      "pass": true,
+      "hard": true
+    },
+    {
+      "name": "short_transient_no_level_a",
+      "pass": true,
+      "hard": true
+    },
+    {
+      "name": "ballooning_like_not_confirmed_manifestation",
+      "latest": "possible_influx_candidate",
+      "pass": true,
+      "hard": true,
+      "note": "Residual: influx-like candidate may still fire; not a confirmed manifestation."
+    },
+    {
+      "name": "score_not_probability",
+      "pass": true,
+      "hard": true
+    },
+    {
+      "name": "report_version_source",
+      "pass": true,
+      "hard": true
+    },
+    {
+      "name": "html_escapes_dynamic",
+      "pass": true,
+      "hard": true
+    },
+    {
+      "name": "empty_csv_ingestion_error",
+      "pass": true,
+      "hard": true
+    },
+    {
+      "name": "api_declares_no_control_or_optional",
+      "pass": true,
+      "hard": false
     }
   ],
   "all_hard_gates_pass": true

@@ -17,6 +17,17 @@ from .regimes import add_regimes
 from .schema import ALGORITHM_VERSION, COMPLICATION_CLASSES, EventClass
 from .timebase import prepare_timebase
 
+# Public FSM labels (mapped from internal persistence phases)
+PHASE_MAP = {
+    "idle": "IDLE",
+    "candidate": "CANDIDATE",
+    "confirmed": "CONFIRMED",
+    "clearing": "CONFIRMED",
+    "cooldown": "COOLDOWN",
+    "transient": "CANDIDATE",
+    "informational": "IDLE",
+}
+
 
 @dataclass
 class DetectorConfig:
@@ -28,10 +39,19 @@ class DetectorConfig:
     adaptation_points: int = 20
 
 
-def _propose(row: pd.Series, cfg: DetectorConfig) -> tuple[str | None, float, list[str]]:
-    """Return (proposed_complication_or_None, heuristic_score, contributors)."""
-    contributors: list[str] = []
+def _has_pit_or_flow_out(row: pd.Series) -> bool:
+    for c in ("pit_volume_m3", "flow_out_lpm"):
+        if c in row.index and pd.notna(row.get(c)):
+            try:
+                if np.isfinite(float(row.get(c))):
+                    return True
+            except (TypeError, ValueError):
+                continue
+    return False
 
+
+def _propose(row: pd.Series, cfg: DetectorConfig) -> tuple[str | None, float, list[str]]:
+    """Return (proposed_label_or_None, heuristic_score / rule_score, contributors)."""
     if not bool(row.get("quality_ok", True)):
         return EventClass.SENSOR_QUALITY_ISSUE.value, 0.55, ["quality_ok=False"]
 
@@ -51,21 +71,33 @@ def _propose(row: pd.Series, cfg: DetectorConfig) -> tuple[str | None, float, li
     if not np.isfinite(pz) or not np.isfinite(fz):
         return EventClass.INSUFFICIENT_HISTORY.value, 0.20, ["nonfinite_z"]
 
-    # Hysteresis uses enter thresholds for proposal
     if pz < -cfg.z_enter and fz < -cfg.z_enter * 0.6:
-        contributors = [f"spp_z={pz:.2f}", f"flow_z={fz:.2f}"]
-        return EventClass.POSSIBLE_LOST_CIRCULATION.value, 0.78, contributors
-    if pz > cfg.z_enter and (fz > cfg.z_enter * 0.35 or pfz > cfg.z_enter * 0.45 or abs(float(row.get("delta_spp_kpa", 0))) > 150):
-        contributors = [f"spp_z={pz:.2f}", f"flow_z={fz:.2f}", f"spp_q_z={pfz:.2f}"]
-        return EventClass.POSSIBLE_PACKOFF.value, 0.80, contributors
+        return (
+            EventClass.POSSIBLE_LOST_CIRCULATION.value,
+            0.72,
+            [f"spp_z={pz:.2f}", f"flow_z={fz:.2f}"],
+        )
+    if pz > cfg.z_enter and (
+        fz > cfg.z_enter * 0.35
+        or pfz > cfg.z_enter * 0.45
+        or abs(float(row.get("delta_spp_kpa", 0))) > 150
+    ):
+        return (
+            EventClass.POSSIBLE_PACKOFF.value,
+            0.80,
+            [f"spp_z={pz:.2f}", f"flow_z={fz:.2f}", f"spp_q_z={pfz:.2f}"],
+        )
     if pz < -cfg.z_enter and fz > cfg.z_enter * 0.7:
-        contributors = [f"spp_z={pz:.2f}", f"flow_z={fz:.2f}"]
-        return EventClass.POSSIBLE_INFLUX.value, 0.55, contributors
+        # Strict: without pit/flow-out this is ONLY an influx-like candidate
+        score = 0.48 if _has_pit_or_flow_out(row) else 0.35
+        return (
+            EventClass.POSSIBLE_INFLUX_CANDIDATE.value,
+            score,
+            [f"spp_z={pz:.2f}", f"flow_z={fz:.2f}", "missing_pit_flow_out_unless_present"],
+        )
     if np.isfinite(td) and td > cfg.td_enter:
-        contributors = [f"torque_drag_index={td:.2f}"]
-        return EventClass.TORQUE_DRAG_ANOMALY.value, 0.74, contributors
+        return EventClass.TORQUE_DRAG_ANOMALY.value, 0.74, [f"torque_drag_index={td:.2f}"]
 
-    # Soft noise band
     if abs(pz) > cfg.z_exit or abs(fz) > cfg.z_exit:
         return None, 0.15, [f"soft_deviation spp_z={pz:.2f} flow_z={fz:.2f}"]
 
@@ -74,18 +106,20 @@ def _propose(row: pd.Series, cfg: DetectorConfig) -> tuple[str | None, float, li
 
 ACTIONS = {
     EventClass.POSSIBLE_PACKOFF.value: (
-        "Проверить циркуляцию, содержание шлама и признаки ухудшения очистки ствола "
-        "(только проверка; без автоматических команд)."
+        "Кандидат на ухудшение очистки ствола или ограничение циркуляции. "
+        "Проверить циркуляцию и шлам (только проверка; без автоматических команд)."
     ),
     EventClass.POSSIBLE_LOST_CIRCULATION.value: (
-        "Проверить баланс раствора и признаки поглощения по утверждённому регламенту."
+        "Кандидат на поглощение по доступному сочетанию давления и расхода. "
+        "Проверить по производственному регламенту; объём поглощения не оценивается."
     ),
-    EventClass.POSSIBLE_INFLUX.value: (
-        "Кандидат на проявление по SPP/flow-in только. Требуется проверка по регламенту; "
-        "без pit/flow-out класс неполон (requires field validation)."
+    EventClass.POSSIBLE_INFLUX_CANDIDATE.value: (
+        "Influx-like candidate по SPP/flow-in. Это НЕ диагностика проявления / well-control. "
+        "Без pit volume и flow-out вывод неполон; сверить с регламентом заказчика."
     ),
     EventClass.TORQUE_DRAG_ANOMALY.value: (
-        "Проверить механическую нагрузку, траекторию и условия очистки."
+        "Упрощённый индекс аномалии момента и нагрузки (не 4DOF T&D). "
+        "Проверить механическую нагрузку и условия очистки."
     ),
     EventClass.SENSOR_QUALITY_ISSUE.value: (
         "Проверить качество измерений до технологического решения."
@@ -102,12 +136,12 @@ ACTIONS = {
 
 
 UNKNOWNS = {
-    EventClass.POSSIBLE_INFLUX.value: (
-        "Нет pit volume / flow-out; возможна путаница с ballooning; "
-        "не полноценная well-control диагностика."
+    EventClass.POSSIBLE_INFLUX_CANDIDATE.value: (
+        "Нет обязательных pit volume / flow-out для well-control; возможна путаница с ballooning; "
+        "не ECD; не подтверждённое проявление."
     ),
     EventClass.POSSIBLE_LOST_CIRCULATION.value: (
-        "Нет модели ECD/реологии; не подтверждает объём поглощения."
+        "Нет модели ECD/реологии; нет оценки объёма; не подтверждённое поглощение."
     ),
     EventClass.POSSIBLE_PACKOFF.value: (
         "Не модель шламовой пробки; эмпирический гидравлический экран."
@@ -132,40 +166,59 @@ def detect(df: pd.DataFrame, cfg: DetectorConfig | None = None) -> pd.DataFrame:
     state = PersistenceState()
     rows: list[dict[str, Any]] = []
     t0 = frame["timestamp"].iloc[0]
-    for i, row in frame.iterrows():
+    event_counter = 0
+    active_event_id: str | None = None
+
+    for _, row in frame.iterrows():
         proposed, score, contrib = _propose(row, cfg)
-        # Informational classes bypass persistence complication path
         dt = float(row["dt_s"]) if pd.notna(row.get("dt_s")) else float(row.get("median_dt_s", 1.0))
-        if proposed in {
-            EventClass.SENSOR_QUALITY_ISSUE.value,
-            EventClass.OPERATION_CHANGE.value,
+
+        if proposed == EventClass.SENSOR_QUALITY_ISSUE.value:
+            label, phase = proposed, "QUALITY_BLOCKED"
+            state = PersistenceState(cooldown_remaining_s=state.cooldown_remaining_s)
+            active_event_id = None
+        elif proposed == EventClass.OPERATION_CHANGE.value:
+            label, phase = proposed, "REGIME_TRANSITION"
+            state = PersistenceState(cooldown_remaining_s=state.cooldown_remaining_s)
+            active_event_id = None
+        elif proposed in {
             EventClass.INSUFFICIENT_HISTORY.value,
             EventClass.SIGNAL_CONFLICT.value,
         }:
             label = proposed
-            phase = "informational"
-            # Reset complication candidate on regime change
-            if proposed == EventClass.OPERATION_CHANGE.value:
-                state = PersistenceState(cooldown_remaining_s=state.cooldown_remaining_s)
+            phase = "WARMUP" if proposed == EventClass.INSUFFICIENT_HISTORY.value else "QUALITY_BLOCKED"
         else:
-            # Only persist complication proposals
             prop = proposed if proposed in COMPLICATION_CLASSES else None
-            state, label, phase = step_persistence(state, prop, dt, pcfg)
-            if label in COMPLICATION_CLASSES:
+            state, label, raw_phase = step_persistence(state, prop, dt, pcfg)
+            phase = PHASE_MAP.get(raw_phase, raw_phase.upper())
+            if label in COMPLICATION_CLASSES and raw_phase == "confirmed":
                 score = max(score, 0.5)
+                if active_event_id is None:
+                    event_counter += 1
+                    active_event_id = f"E{event_counter:04d}"
             elif label in {EventClass.SHORT_TRANSIENT.value, EventClass.NORMAL_NOISE.value}:
                 score = min(score, 0.25)
+                active_event_id = None
+            elif label == EventClass.NONE.value:
+                active_event_id = None
+
+        if label == EventClass.INSUFFICIENT_HISTORY.value:
+            phase = "WARMUP"
 
         elapsed = (row["timestamp"] - t0).total_seconds()
         rows.append(
             {
                 "event": label,
                 "heuristic_score": round(float(score), 3),
+                "rule_score": round(float(score), 3),
+                "screening_score": round(float(score), 3),
                 "detector_phase": phase,
+                "event_id": active_event_id if label in COMPLICATION_CLASSES else None,
                 "contributing_features": ";".join(contrib) if contrib else "",
                 "recommended_action": ACTIONS.get(label, ACTIONS[EventClass.NONE.value]),
-                "unknowns": UNKNOWNS.get(label, "Полевая точность не подтверждена."),
+                "unknowns": UNKNOWNS.get(label, "Полевая точность не подтверждена (requires_field_validation)."),
                 "elapsed_s": elapsed,
+                "score_semantics": "heuristic_score_not_probability",
             }
         )
 

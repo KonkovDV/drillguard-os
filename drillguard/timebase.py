@@ -1,4 +1,9 @@
-"""Temporal integrity: parse, sort, duplicates, sampling rate, gaps."""
+"""Temporal integrity: parse, sort, duplicates, sampling rate, gaps.
+
+Timezone policy (documented): timestamps are parsed with pandas without forcing UTC.
+Naive and timezone-aware inputs are accepted; mixes that pandas cannot align will raise.
+Detection delays and FA/h use timestamp deltas in seconds from the parsed series.
+"""
 
 from __future__ import annotations
 

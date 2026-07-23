@@ -14,7 +14,10 @@ SCENARIO_NAMES = [
     "bit_nozzle_packoff",
     "lost_circulation",
     "influx",
+    "influx_like",
+    "ballooning_like",
     "torque",
+    "torque_drag",
     "hookload_rise",
     "pump_start_stop",
     "flow_change",
@@ -53,7 +56,11 @@ def make_scenario(
     intensity: float = 1.0,
 ) -> tuple[pd.DataFrame, dict[str, Any]]:
     """Return (frame, ground_truth). All results are synthetic."""
-    if name == "operation_change":
+    if name in {"influx", "influx_like"}:
+        name = "influx_like"
+    elif name == "torque_drag":
+        name = "torque"
+    elif name == "operation_change":
         name = "connection"
     elif name not in SCENARIO_NAMES:
         raise ValueError(f"Unknown scenario: {name}")
@@ -115,13 +122,21 @@ def make_scenario(
         channels = ["standpipe_pressure_kpa", "pump_flow_lpm"]
         _hold_ramp(pressure, a, b, -2600 * intensity)
         _hold_ramp(flow, a, b, -200 * intensity)
-    elif name == "influx":
+    elif name == "influx_like":
         a, b = inject(mid, dur)
         event_start, event_end = a, n - 1
-        event_class = "possible_influx"
+        event_class = "possible_influx_candidate"
         channels = ["standpipe_pressure_kpa", "pump_flow_lpm"]
         _hold_ramp(pressure, a, b, -2200 * intensity)
         _hold_ramp(flow, a, b, 160 * intensity)
+    elif name == "ballooning_like":
+        # Pressure drop with mild flow rise — known confound for influx-like screens
+        a, b = inject(mid, dur)
+        event_start, event_end = a, n - 1
+        event_class = "ballooning_like"
+        channels = ["standpipe_pressure_kpa", "pump_flow_lpm"]
+        _hold_ramp(pressure, a, b, -1800 * intensity)
+        _hold_ramp(flow, a, b, 40 * intensity)
     elif name == "torque":
         a, b = inject(mid, dur)
         event_start, event_end = a, n - 1
@@ -252,9 +267,14 @@ def make_scenario(
         }
     )
 
+    # Enrich GT with timestamps when indices known
+    est = str(df.loc[event_start, "timestamp"]) if event_start is not None else None
+    eet = str(df.loc[event_end, "timestamp"]) if event_end is not None else None
+
     gt = {
         "scenario": name,
         "synthetic": True,
+        "data_origin": "synthetic",
         "seed": seed,
         "n": n,
         "freq": freq,
@@ -263,8 +283,13 @@ def make_scenario(
         "event_class": event_class,
         "event_start_idx": event_start,
         "event_end_idx": event_end,
+        "event_start_timestamp": est,
+        "event_end_timestamp": eet,
         "channels_affected": channels,
+        "affected_channels": channels,
         "regime": "drilling",
+        "operation": str(op[0]),
+        "expected_action": "engineer_verification_only",
         "requires_field_validation": True,
         "claim_level": "synthetic_only",
     }

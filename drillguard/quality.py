@@ -1,4 +1,4 @@
-"""Data-quality reasons and gating flags."""
+"""Data-quality reasons and gating flags (machine-readable codes)."""
 
 from __future__ import annotations
 
@@ -26,13 +26,12 @@ def add_quality_flags(df: pd.DataFrame) -> pd.DataFrame:
             if not quality_ok[i]:
                 continue
             if np.isnan(v):
-                reasons[i] = f"nan:{c}"
+                reasons[i] = "missing_value"
                 quality_ok[i] = False
             elif not np.isfinite(v):
-                reasons[i] = f"nonfinite:{c}"
+                reasons[i] = "nonfinite_value"
                 quality_ok[i] = False
 
-    # Physical range / negativity for channels that must be non-negative
     nonneg = [
         "depth_m",
         "standpipe_pressure_kpa",
@@ -48,10 +47,10 @@ def add_quality_flags(df: pd.DataFrame) -> pd.DataFrame:
             if not quality_ok[i] or not np.isfinite(v):
                 continue
             if v < 0:
-                reasons[i] = f"negative:{c}"
+                reasons[i] = "negative_physical_value"
                 quality_ok[i] = False
             elif v < lo or v > hi:
-                reasons[i] = f"out_of_range:{c}"
+                reasons[i] = "out_of_range"
                 quality_ok[i] = False
 
     if "duplicate_timestamp" in out.columns:
@@ -64,14 +63,17 @@ def add_quality_flags(df: pd.DataFrame) -> pd.DataFrame:
         for i in np.where(out["gap_flag"].fillna(False).to_numpy())[0]:
             if reasons[i] == "ok":
                 reasons[i] = "gap_in_timeline"
-            # gaps do not automatically invalidate quality_ok for the sample itself
+
+    if "irregular_dt" in out.columns:
+        for i in np.where(out["irregular_dt"].fillna(False).to_numpy())[0]:
+            if reasons[i] == "ok":
+                reasons[i] = "irregular_timebase"
 
     if "channel_desync_suspect" in out.columns:
         for i in np.where(out["channel_desync_suspect"].fillna(False).to_numpy())[0]:
             if reasons[i] == "ok":
-                reasons[i] = "channel_desync_suspect"
+                reasons[i] = "channel_desynchronized"
 
-    # Stuck / flatline detector (pressure) over short window
     spp = out["standpipe_pressure_kpa"].to_numpy(dtype=float)
     stuck = np.zeros(n, dtype=bool)
     win = 15
@@ -80,11 +82,21 @@ def add_quality_flags(df: pd.DataFrame) -> pd.DataFrame:
         if np.all(np.isfinite(seg)) and float(np.nanstd(seg)) < 1e-6:
             stuck[i] = True
             if quality_ok[i] and reasons[i] == "ok":
-                reasons[i] = "stale_channel:standpipe_pressure_kpa"
+                reasons[i] = "stale_channel"
                 quality_ok[i] = False
 
-    # Regime conflict placeholder filled later if operation string conflicts with pumps
     out["quality_ok"] = quality_ok
     out["quality_reason"] = reasons
     out["stale_pressure"] = stuck
     return out
+
+
+def quality_report(df: pd.DataFrame) -> dict:
+    if "quality_reason" not in df.columns:
+        df = add_quality_flags(df)
+    vc = df["quality_reason"].value_counts().to_dict()
+    return {
+        "rows": int(len(df)),
+        "quality_ok_pct": round(float(df["quality_ok"].mean() * 100), 2),
+        "reason_counts": {str(k): int(v) for k, v in vc.items()},
+    }

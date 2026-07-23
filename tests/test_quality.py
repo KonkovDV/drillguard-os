@@ -9,7 +9,7 @@ def test_nan_flag():
     df.loc[10, "standpipe_pressure_kpa"] = np.nan
     out = add_quality_flags(df)
     assert not out.loc[10, "quality_ok"]
-    assert "nan" in out.loc[10, "quality_reason"]
+    assert out.loc[10, "quality_reason"] == "missing_value"
 
 def test_negative_flow():
     df, _ = make_scenario("normal", n=50, seed=0)
@@ -17,7 +17,7 @@ def test_negative_flow():
     df.loc[12, "pump_flow_lpm"] = -10
     out = add_quality_flags(df)
     assert not out.loc[12, "quality_ok"]
-    assert "negative" in out.loc[12, "quality_reason"]
+    assert out.loc[12, "quality_reason"] == "negative_physical_value"
 
 def test_flagged_data_quality():
     df, _ = make_scenario("normal", n=50, seed=0)

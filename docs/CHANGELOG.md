@@ -1,18 +1,15 @@
 # Changelog
 
+## 0.2.1 — 2026-07-23
+
+- Benchmark Level A/B/C; demote appearance-rate KPI; HTML leads with limitations.
+- Rename influx screen to `possible_influx_candidate` (not well-control diagnosis).
+- Full Apache-2.0 `LICENSE` text + SPDX in `pyproject.toml` (fix GitHub NOASSERTION risk).
+- Causality tests: prefix=full, future mutation, regime return warmup.
+- Hard red-team gates with non-zero exit; expanded probe count/scope statement.
+- Machine-readable quality reason codes; ballooning_like scenario.
+- Version sync to 0.2.1.
+
 ## 0.2.0 — 2026-07-23
 
-- Causal regime baseline (past-only, min history, freeze on candidate).
-- Timebase: sort, duplicates, sampling, gaps.
-- Expanded quality reasons; flatline detector.
-- Persistence / hysteresis / cooldown; short_transient vs complications.
-- `heuristic_score` replaces probability-like `confidence`.
-- Structured event cards + HTML escaping.
-- Expanded synthetic scenarios + metrics (delay, FA/h, F1, seed aggregates).
-- Local API + HTML dashboard.
-- Docs: data dictionary, physics assumptions, validation protocol, limitations.
-- Test suite expanded (schema → benchmark/security).
-
-## 0.1.0
-
-- Initial synthetic MVP.
+- Causal baseline, timebase, persistence, API/dashboard, synthetic MVP docs.
