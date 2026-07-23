@@ -24,6 +24,7 @@
   ],
   "n_scenarios": 10,
   "n_seeds": 5,
+  "n_cases": 50,
   "cases": [
     {
       "scenario": "normal",
@@ -2412,5 +2413,6 @@
     "heuristic_score_not_probability": true,
     "synthetic_only": true,
     "event_appearance_rate_is_not_primary": true
-  }
+  },
+  "claims_manifest_path": "artifacts/CLAIMS_MANIFEST.json"
 }

@@ -7,7 +7,7 @@
   "expected_benchmark_cases": 50,
   "expected_redteam_probes": 12,
   "expected_redteam_hard_gates": 11,
-  "expected_pytest_min": 47,
+  "expected_pytest_count": 53,
   "demoted_metrics": [
     "compat_appearance_rate",
     "compat_latest_match",
@@ -22,8 +22,15 @@
     "short_transient_no_escalation",
     "well_control_overclaim"
   ],
+  "verify_urls": {
+    "main_commits": "https://github.com/KonkovDV/drillguard-os/commits/main",
+    "redteam_raw_main": "https://raw.githubusercontent.com/KonkovDV/drillguard-os/main/artifacts/redteam_results.json",
+    "benchmark_raw_main": "https://raw.githubusercontent.com/KonkovDV/drillguard-os/main/artifacts/benchmark_results.json",
+    "manifest_raw_main": "https://raw.githubusercontent.com/KonkovDV/drillguard-os/main/artifacts/CLAIMS_MANIFEST.json"
+  },
   "notes": [
-    "Do not cite probe/case counts unless artifacts/redteam_results.json and artifacts/benchmark_results.json match this manifest.",
+    "Do not cite probe/case counts unless artifacts JSON match this manifest.",
+    "If browser shows old commit/JSON, hard-refresh or open raw.githubusercontent.com links above (bypass HTML cache).",
     "possible_influx_candidate display: Кандидат на поведение, похожее на проявление."
   ]
 }

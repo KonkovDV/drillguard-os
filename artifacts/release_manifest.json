@@ -5,12 +5,14 @@
   "requires_field_validation": true,
   "license": "Apache-2.0",
   "evidence_ssot": "artifacts/CLAIMS_MANIFEST.json",
+  "docs": "docs/EVIDENCE_SYNC.md",
   "expected": {
     "benchmark_cases": 50,
     "core_scenarios": 10,
     "seeds": 5,
     "redteam_probes": 12,
-    "redteam_hard_gates": 11
+    "redteam_hard_gates": 11,
+    "pytest_count": 53
   },
   "artifacts": [
     "artifacts/CLAIMS_MANIFEST.json",

@@ -19,6 +19,30 @@ def test_claims_manifest_matches_code_version():
     assert m["algorithm_version"] == ALGORITHM_VERSION
     assert m["expected_core_scenarios"] == len(CORE_SCENARIOS)
     assert m["expected_benchmark_cases"] == m["expected_core_scenarios"] * m["expected_seeds"]
+    assert m.get("expected_pytest_count", m.get("expected_pytest_min", 0)) >= 53
+
+
+def test_pytest_collect_count_matches_manifest():
+    import re
+    import subprocess
+    import sys
+
+    m = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    expected = int(m.get("expected_pytest_count", m.get("expected_pytest_min", 0)))
+    proc = subprocess.run(
+        [sys.executable, "-m", "pytest", "--collect-only"],
+        cwd=str(ROOT),
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    text = proc.stdout + proc.stderr
+    match = re.search(r"(\d+)\s+tests?\s+collected", text) or re.search(
+        r"collected\s+(\d+)\s+items?", text
+    )
+    assert match, text[-500:]
+    n = int(match.group(1))
+    assert n == expected, f"collected={n} expected={expected}"
 
 
 def test_benchmark_artifact_matches_manifest():

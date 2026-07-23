@@ -2,7 +2,8 @@
 
 Локальная **рекомендательная** система скрининга **кандидатов** на осложнения при бурении.
 
-**Версия:** 0.2.2 · **Статус:** воспроизводимый **синтетический** демонстратор.
+**Версия:** 0.2.2 · **Evidence tip:** check [`commits/main`](https://github.com/KonkovDV/drillguard-os/commits/main) and raw JSON (see [`docs/EVIDENCE_SYNC.md`](docs/EVIDENCE_SYNC.md)).  
+**Статус:** воспроизводимый **синтетический** демонстратор.
 **Не является** ПАЗ / well-control системой, не управляет буровой, не пишет в АСУ ТП/SCADA, не заменяет инженера и **не заявляет полевую точность**.
 
 Результаты demo/benchmark: `synthetic_only` + `requires_field_validation`.

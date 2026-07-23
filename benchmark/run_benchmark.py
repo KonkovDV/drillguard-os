@@ -93,10 +93,14 @@ def run(
         "seeds": seeds,
         "n_scenarios": len(scenarios),
         "n_seeds": len(seeds),
+        "n_cases": len(cases),
         "cases": cases,
         "aggregate": aggregate,
         "gates": gates,
+        "claims_manifest_path": "artifacts/CLAIMS_MANIFEST.json",
     }
+    # Keep top-level n_cases explicit for auditors
+    assert report["n_cases"] == len(scenarios) * len(seeds)
     out_path = Path(output)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
