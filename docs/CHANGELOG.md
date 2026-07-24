@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.2 — 2026-07-24 (red-team pass 3, counts unchanged)
+
+- Do not bridge candidates across quality holes; sticky desync until SPP recovers.
+- Drift FULL scenarios mark `data_quality=bad`; mud_density SPP bump reduced; clearing→CLEARING.
+- Appearance demotion gate requires per_class demotion note.
+
 ## 0.2.2 — 2026-07-24 (red-team pass 2, counts unchanged)
 
 - CLI `dashboard` subcommand; `python -m drillguard.api` starts local uvicorn.

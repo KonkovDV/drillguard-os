@@ -43,20 +43,34 @@ def prepare_timebase(df: pd.DataFrame) -> pd.DataFrame:
     ) & dt.notna()
 
     # Channel sync proxy: extreme SPP jump while flow stays quiet (no gap required).
-    # Latch forward so a one-sample spike cannot immediately become packoff.
+    # Sticky while SPP remains elevated vs pre-hit baseline (avoids post-latch packoff FA).
     analysis["channel_desync_suspect"] = False
     if len(analysis) > 2:
+        spp = analysis["standpipe_pressure_kpa"].to_numpy(dtype=float)
         p = analysis["standpipe_pressure_kpa"].diff().abs()
         f = analysis["pump_flow_lpm"].diff().abs()
-        hit = ((p > p.median() * 20 + 500) & (f < f.median() * 2 + 5)).fillna(False)
+        hit = ((p > p.median() * 20 + 500) & (f < f.median() * 2 + 5)).fillna(False).to_numpy()
         latched = np.zeros(len(analysis), dtype=bool)
         remain = 0
-        for i, flag in enumerate(hit.to_numpy()):
+        sticky = False
+        pre_med: float | None = None
+        for i, flag in enumerate(hit):
             if flag:
-                remain = max(remain, 15)
+                remain = max(remain, 20)
+                if not sticky:
+                    window = spp[max(0, i - 30) : i]
+                    pre_med = float(np.nanmedian(window)) if len(window) else float(spp[i])
+                sticky = True
             if remain > 0:
                 latched[i] = True
                 remain -= 1
+            elif sticky and pre_med is not None and np.isfinite(spp[i]):
+                # Still elevated vs pre-desync baseline → keep quality gate
+                if abs(float(spp[i]) - pre_med) > 400:
+                    latched[i] = True
+                else:
+                    sticky = False
+                    pre_med = None
         analysis["channel_desync_suspect"] = latched
 
     analysis.attrs.update(out.attrs)

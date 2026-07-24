@@ -82,8 +82,7 @@ QUALITY_REASON_CODES = [
     "irregular_timebase",
     "gap_in_timeline",
     "flatline",
-    "stale_channel",
-    "unit_unknown",
+    "unit_unknown",  # reserved; not emitted in v0.2.2
     "insufficient_history",
     "regime_conflict",
     "channel_desynchronized",

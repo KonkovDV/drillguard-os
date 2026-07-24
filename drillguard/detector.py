@@ -22,7 +22,7 @@ PHASE_MAP = {
     "idle": "IDLE",
     "candidate": "CANDIDATE",
     "confirmed": "CONFIRMED",
-    "clearing": "CONFIRMED",
+    "clearing": "CLEARING",
     "cooldown": "COOLDOWN",
     "transient": "TRANSIENT",
     "informational": "IDLE",
@@ -191,8 +191,14 @@ def detect(df: pd.DataFrame, cfg: DetectorConfig | None = None) -> pd.DataFrame:
 
         if proposed == EventClass.SENSOR_QUALITY_ISSUE.value:
             label, phase = proposed, "QUALITY_BLOCKED"
-            # Preserve FSM across brief quality holes so confirmed events do not fragment.
-            # (Do not hard-reset PersistenceState / active_event_id here.)
+            if state.active_class is not None:
+                # Preserve confirmed event across brief quality holes (no fragment / new event_id).
+                pass
+            else:
+                # Do NOT bridge incomplete candidates across quality gaps (would fake duration).
+                state.candidate_class = None
+                state.candidate_accum_s = 0.0
+                state.candidate_points = 0
         elif proposed == EventClass.OPERATION_CHANGE.value:
             label, phase = proposed, "REGIME_TRANSITION"
             state = PersistenceState(cooldown_remaining_s=state.cooldown_remaining_s)

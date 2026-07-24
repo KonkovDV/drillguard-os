@@ -46,6 +46,19 @@ Pass 2 closed remaining MEDIUM residuals (entrypoint overclaim, quality FSM wipe
 | RT2-10 | LOW | Physics disclaimer said `v0.2` | `v0.2.x` |
 | RT2-11 | LOW | `release_manifest` omitted dashboards | Listed |
 
+## Pass 3 findings → disposition
+
+| ID | Sev | Finding | Fix |
+|---|---|---|---|
+| RT3-01 | MED | Candidates bridged across quality holes → fake confirm | Clear candidate on quality unless already confirmed |
+| RT3-02 | MED | Desync latch expiry → packoff on sustained offset | Sticky desync until SPP returns near pre-hit baseline |
+| RT3-03 | MED | `sensor_pressure_drift` GT quality but packoff FA | Mark drift window `data_quality=bad` |
+| RT3-04 | MED | `mud_density_change` GT none but large SPP → packoff | Reduce coupled SPP bump to +80 kPa |
+| RT3-05 | LOW | `clearing` mapped to CONFIRMED with low score | Map to `CLEARING` |
+| RT3-06 | LOW | `sensor_flow_drift` never quality-gated | Same dq flag as pressure drift |
+| RT3-07 | LOW | Appearance demotion gate soft | Require per_class demotion note + Primary metrics note |
+| RT3-08 | LOW | `stale_channel` listed but unused | Removed; `unit_unknown` reserved |
+
 ## Unchanged claims (verified)
 
 - `algorithm_version` **0.2.2**

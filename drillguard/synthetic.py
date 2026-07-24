@@ -223,7 +223,8 @@ def make_scenario(
         event_class = "none"
         channels = ["mud_density_sg"]
         dens[a:b] = 1.35
-        pressure[a:b] += 400
+        # Small coupled SPP shift only — large bumps falsely look like packoff under GT=none.
+        pressure[a:b] += 80
     elif name == "mixed_packoff_torque":
         a, b = inject(mid, dur)
         event_start, event_end = a, n - 1
@@ -254,6 +255,11 @@ def make_scenario(
     if name == "desync" and event_start is not None and event_end is not None:
         # Desync injection is a quality/integrity episode, not a packoff truth.
         for i in range(event_start, min(event_end + 1, n)):
+            dq[i] = "bad"
+    if name in {"sensor_pressure_drift", "sensor_flow_drift"} and event_start is not None:
+        # Drift scenarios are GT sensor_quality_issue — mark integrity for the held offset.
+        end = event_end if event_end is not None else n - 1
+        for i in range(event_start, min(end + 1, n)):
             dq[i] = "bad"
 
     df = pd.DataFrame(

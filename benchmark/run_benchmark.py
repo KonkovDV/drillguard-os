@@ -78,6 +78,12 @@ def run(
         "Requires labeled archive + temporal holdout for any field claim."
     )
     # Hard gates — computed from case/aggregate fields (not only banner self-check).
+    notes = [
+        str(v.get("note", ""))
+        for v in aggregate.get("per_class", {}).values()
+        if isinstance(v, dict)
+    ]
+    demoted_note_ok = any("NOT a primary quality metric" in n for n in notes)
     gates = {
         "normal_zero_complication_fa": bool(
             aggregate.get("normal_scenario_gate", {}).get("all_zero_complication_fa")
@@ -90,10 +96,13 @@ def run(
         "synthetic_only": all(c.get("claim_level") == "synthetic_only" for c in cases)
         and all(c.get("requires_field_validation") is True for c in cases),
         "event_appearance_rate_is_not_primary": (
-            "compat_appearance_rate_demoted" in aggregate
-            and "compat" in str(aggregate.get("primary_metrics_note", "")).lower()
+            demoted_note_ok
+            and "compat_appearance_rate_demoted" in aggregate
+            and "Primary:" in str(aggregate.get("primary_metrics_note", ""))
         ),
     }
+    # CI exit must not key off appearance rate (only normal_zero_complication_fa fails the process).
+    assert "compat_appearance" not in str(gates.get("normal_zero_complication_fa"))
     report = {
         "algorithm_version": ALGORITHM_VERSION,
         "limitations_banner": limitations,
