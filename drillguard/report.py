@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from .events import build_event_cards, summarize
-from .schema import ALGORITHM_VERSION
+from .schema import ALGORITHM_VERSION, READINESS_LEVEL
 
 
 def build_report(
@@ -26,6 +26,7 @@ def build_report(
         "source_id": source_id or out.attrs.get("source_id", "<memory>"),
         "claim_level": "synthetic_only",
         "requires_field_validation": True,
+        "readiness_level": READINESS_LEVEL,
         "advisory_banner": (
             "Только рекомендация. Система не управляет буровой, не пишет в АСУ ТП/SCADA "
             "и не является противоаварийной защитой."

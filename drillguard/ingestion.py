@@ -7,7 +7,7 @@ from typing import Any
 
 import pandas as pd
 
-from .schema import OPTIONAL_COLUMNS, REQUIRED_COLUMNS
+from .schema import OPTIONAL_COLUMNS, OPTIONAL_NUMERIC, REQUIRED_COLUMNS
 
 MAX_FILE_BYTES = 50 * 1024 * 1024
 MAX_ROWS = 500_000
@@ -57,6 +57,9 @@ def validate_frame(df: pd.DataFrame, *, source: str = "<memory>") -> pd.DataFram
     # Coerce numeric required channels
     for c in REQUIRED_COLUMNS[1:8]:
         out[c] = pd.to_numeric(out[c], errors="coerce")
+    for c in OPTIONAL_NUMERIC:
+        if c in out.columns:
+            out[c] = pd.to_numeric(out[c], errors="coerce")
 
     out.attrs["source_id"] = source
     return out

@@ -6,7 +6,13 @@ from typing import Any
 
 import pandas as pd
 
-from .schema import ALGORITHM_VERSION, COMPLICATION_CLASSES, EventClass
+from .explain import explain_row
+from .schema import (
+    ALGORITHM_VERSION,
+    COMPLICATION_CLASSES,
+    OPTIONAL_COLUMNS,
+    EventClass,
+)
 
 
 def build_event_cards(
@@ -20,11 +26,13 @@ def build_event_cards(
     if len(out) == 0:
         return cards
 
-    # Group contiguous same-event runs for complication + key informational classes
+    # Letter result classes that produce reviewable cards
     track = COMPLICATION_CLASSES | {
         EventClass.SENSOR_QUALITY_ISSUE.value,
         EventClass.OPERATION_CHANGE.value,
         EventClass.SHORT_TRANSIENT.value,
+        EventClass.SIGNAL_CONFLICT.value,
+        EventClass.INSUFFICIENT_HISTORY.value,
     }
     current = None
     start = 0
@@ -35,6 +43,26 @@ def build_event_cards(
             current = ev
             start = i
     return cards
+
+
+def _optional_context(row: pd.Series) -> dict[str, Any]:
+    ctx: dict[str, Any] = {}
+    for c in OPTIONAL_COLUMNS:
+        if c not in row.index:
+            continue
+        v = row.get(c)
+        try:
+            if v is None or pd.isna(v):
+                continue
+        except (TypeError, ValueError):
+            continue
+        if isinstance(v, (int, float)):
+            ctx[c] = round(float(v), 4)
+        else:
+            s = str(v).strip()
+            if s and s.lower() != "nan":
+                ctx[c] = s
+    return ctx
 
 
 def _card(
@@ -61,6 +89,7 @@ def _card(
     well_control_overclaim = (
         event == EventClass.POSSIBLE_INFLUX_CANDIDATE.value and max_score > 0.55
     )
+    contrib = str(seg["contributing_features"].iloc[-1])
     return {
         "event_class": event,
         "display_label": str(last.get("display_label", event)),
@@ -74,7 +103,8 @@ def _card(
         "heuristic_score": max_score,
         "score_semantics": "heuristic_rule_weight_not_calibrated_probability",
         "data_quality_ok_pct": round(float(seg["quality_ok"].mean() * 100), 2),
-        "contributing_features": str(seg["contributing_features"].iloc[-1]),
+        "contributing_features": contrib,
+        "explanation": explain_row(contrib, event),
         "baseline_interval": {
             "window_points": int(first.get("baseline_window", 0)),
             "min_history": int(first.get("baseline_min_history", 0)),
@@ -87,6 +117,7 @@ def _card(
             "torque_drag_index": _f(first.get("torque_drag_index")),
             "pressure_per_flow_z": _f(first.get("pressure_per_flow_z")),
         },
+        "optional_context": _optional_context(last),
         "unknowns": str(last["unknowns"]),
         "recommended_check": str(last["recommended_action"]),
         "prominent_warning": (

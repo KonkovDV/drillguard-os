@@ -109,14 +109,19 @@ DISPLAY_LABELS = {
         "Кандидат на поведение, похожее на проявление"
     ),
     EventClass.POSSIBLE_PACKOFF.value: (
-        "Кандидат на ухудшение очистки ствола / ограничение циркуляции"
+        "Кандидат на ухудшение очистки ствола или ограничение циркуляции"
     ),
-    EventClass.POSSIBLE_LOST_CIRCULATION.value: (
-        "Кандидат на поглощение (по доступным сигналам)"
+    EventClass.POSSIBLE_LOST_CIRCULATION.value: "Кандидат на поглощение",
+    EventClass.TORQUE_DRAG_ANOMALY.value: "Аномалия крутящего момента и нагрузки",
+    EventClass.SENSOR_QUALITY_ISSUE.value: "Проблема качества измерений",
+    EventClass.OPERATION_CHANGE.value: "Смена операции",
+    EventClass.SHORT_TRANSIENT.value: "Короткий выброс",
+    EventClass.INSUFFICIENT_HISTORY.value: (
+        "Недостаток истории для построения базовой линии"
     ),
-    EventClass.TORQUE_DRAG_ANOMALY.value: (
-        "Упрощённый индекс аномалии момента и нагрузки"
-    ),
+    EventClass.SIGNAL_CONFLICT.value: "Конфликт режима и сигналов",
+    EventClass.NORMAL_NOISE.value: "Отклонение в пределах ожидаемого шума",
+    EventClass.NONE.value: "Нет устойчивого кандидата",
 }
 
 ACTIONS = {

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.2 — 2026-07-24 (INDUSTRIX letter alignment, counts unchanged)
+
+- Optional channels: temperature, cuttings, rheology yield point, equipment/alarms/reports/comments.
+- Full DISPLAY_LABELS + letter RU map; cards carry `optional_context` + `explanation`.
+- УТГ 4 / TRL 4 self-assessment in `schema_manifest`; INDUSTRIX sync/PILOT docs aligned to letter.
+
 ## 0.2.2 — 2026-07-24 (red-team pass 3, counts unchanged)
 
 - Do not bridge candidates across quality holes; sticky desync until SPP recovers.

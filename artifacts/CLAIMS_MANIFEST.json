@@ -42,6 +42,7 @@
   "notes": [
     "Do not cite probe/case counts unless artifacts JSON match this manifest.",
     "If browser shows old commit/JSON, hard-refresh or open raw.githubusercontent.com links above (bypass HTML cache).",
-    "possible_influx_candidate display: Кандидат на поведение, похожее на проявление."
+    "possible_influx_candidate display: Кандидат на поведение, похожее на проявление.",
+    "INDUSTRIX letter alignment: optional channels + УТГ4 self-assessment in schema_manifest; counts unchanged."
   ]
 }

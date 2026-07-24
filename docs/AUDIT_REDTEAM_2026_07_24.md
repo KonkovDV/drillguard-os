@@ -67,6 +67,15 @@ Pass 2 closed remaining MEDIUM residuals (entrypoint overclaim, quality FSM wipe
 - redteam **12** probes / **11** hard / `all_hard_gates_pass`
 - `claim_level=synthetic_only` · `requires_field_validation=true`
 
+## Pass 4 — INDUSTRIX letter alignment (counts unchanged)
+
+Closed PARTIAL gaps vs cover letter:
+
+- Optional channels in schema: temperature, cuttings, yield point, equipment/alarms/reports/comments.
+- `event_class_letter_ru` + full DISPLAY_LABELS («конфликт режима и сигналов» ↔ `signal_conflict`).
+- Cards: `optional_context` + `explanation`; reports include `readiness_level` УТГ4/TRL4 self-assessment.
+- Docs: DATA_DICTIONARY, INDUSTRIX_APPLICATION_SYNC, PILOT_PLAN, README synced to letter.
+
 ## Residual risk (accepted)
 
 - Soft API probe remains `hard: false` (optional extra).

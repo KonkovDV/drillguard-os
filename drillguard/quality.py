@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from .schema import COLUMN_RANGES, GOOD_QUALITY_TOKENS, NUMERIC_REQUIRED
+from .schema import COLUMN_RANGES, GOOD_QUALITY_TOKENS, NUMERIC_REQUIRED, OPTIONAL_NUMERIC
 
 
 def add_quality_flags(df: pd.DataFrame) -> pd.DataFrame:
@@ -50,6 +50,19 @@ def add_quality_flags(df: pd.DataFrame) -> pd.DataFrame:
                 reasons[i] = "negative_physical_value"
                 quality_ok[i] = False
             elif v < lo or v > hi:
+                reasons[i] = "out_of_range"
+                quality_ok[i] = False
+
+    # Soft ranges for optional numeric channels when present/finite
+    for c in OPTIONAL_NUMERIC:
+        if c not in out.columns or c not in COLUMN_RANGES:
+            continue
+        lo, hi = COLUMN_RANGES[c]
+        arr = out[c].to_numpy(dtype=float)
+        for i, v in enumerate(arr):
+            if not quality_ok[i] or not np.isfinite(v):
+                continue
+            if v < lo or v > hi:
                 reasons[i] = "out_of_range"
                 quality_ok[i] = False
 

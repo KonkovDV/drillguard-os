@@ -20,13 +20,27 @@ REQUIRED_COLUMNS = [
     "data_quality",
 ]
 
-OPTIONAL_COLUMNS = [
+# Optional channels aligned with INDUSTRIX cover letter («при наличии дополнительно»).
+# Text/context fields are ingested for cards/pilot review; they do not drive Level-A rules in v0.2.2.
+OPTIONAL_NUMERIC = [
     "mud_density_sg",
     "plastic_viscosity_cp",
+    "yield_point_pa",
     "flow_out_lpm",
     "pit_volume_m3",
     "bit_depth_m",
+    "temperature_c",
+    "cuttings_load_pct",
 ]
+
+OPTIONAL_TEXT = [
+    "equipment_status",
+    "daily_report_ref",
+    "active_alarms",
+    "engineer_comment",
+]
+
+OPTIONAL_COLUMNS = OPTIONAL_NUMERIC + OPTIONAL_TEXT
 
 # Physical envelopes used for quality gating (not SIL limits).
 COLUMN_UNITS: dict[str, str] = {
@@ -42,9 +56,16 @@ COLUMN_UNITS: dict[str, str] = {
     "data_quality": "ok|good|1|true|bad|...",
     "mud_density_sg": "specific gravity",
     "plastic_viscosity_cp": "cP",
+    "yield_point_pa": "Pa",
     "flow_out_lpm": "L/min",
     "pit_volume_m3": "m³",
     "bit_depth_m": "m",
+    "temperature_c": "°C",
+    "cuttings_load_pct": "%",
+    "equipment_status": "free text / code",
+    "daily_report_ref": "report id or excerpt ref",
+    "active_alarms": "alarm codes / text",
+    "engineer_comment": "free text",
 }
 
 COLUMN_RANGES: dict[str, tuple[float, float]] = {
@@ -57,9 +78,12 @@ COLUMN_RANGES: dict[str, tuple[float, float]] = {
     "pump_rpm": (0.0, 400.0),
     "mud_density_sg": (0.8, 2.5),
     "plastic_viscosity_cp": (1.0, 120.0),
+    "yield_point_pa": (0.0, 200.0),
     "flow_out_lpm": (0.0, 5_000.0),
     "pit_volume_m3": (0.0, 500.0),
     "bit_depth_m": (0.0, 15_000.0),
+    "temperature_c": (-20.0, 200.0),
+    "cuttings_load_pct": (0.0, 100.0),
 }
 
 # Minimum absolute scale for MAD (prevents hypersensitive z on low-noise synthetics).
@@ -99,6 +123,23 @@ ALLOWED_DATA_ORIGINS = frozenset(
     }
 )
 
+# Self-assessment for INDUSTRIX letter (software prototype scope only).
+READINESS_LEVEL = {
+    "framework": "УТГ / TRL (self-assessment for software prototype)",
+    "level": "УТГ 4 / TRL 4",
+    "scope": (
+        "Programmable prototype and reproducible calculation loop "
+        "(synthetic evidence + documented pilot path)."
+    ),
+    "not_claimed": [
+        "field accuracy",
+        "kick/loss/packoff confirmation",
+        "economic effect",
+        "industrial autonomous operation",
+        "SIL / ПАЗ readiness",
+    ],
+}
+
 
 class EventClass(str, Enum):
     NONE = "none"
@@ -112,6 +153,7 @@ class EventClass(str, Enum):
     # Strict naming: not a well-control diagnosis without pit/flow-out.
     POSSIBLE_INFLUX_CANDIDATE = "possible_influx_candidate"
     TORQUE_DRAG_ANOMALY = "torque_drag_anomaly"
+    # Letter wording: «конфликт режима и сигналов» — machine id remains signal_conflict.
     SIGNAL_CONFLICT = "signal_conflict"
 
 
@@ -164,14 +206,35 @@ def schema_manifest() -> dict[str, Any]:
         "algorithm_version": ALGORITHM_VERSION,
         "required_columns": REQUIRED_COLUMNS,
         "optional_columns": OPTIONAL_COLUMNS,
+        "optional_numeric": OPTIONAL_NUMERIC,
+        "optional_text": OPTIONAL_TEXT,
         "units": COLUMN_UNITS,
         "ranges": {k: {"min": v[0], "max": v[1]} for k, v in COLUMN_RANGES.items()},
         "noise_floor": NOISE_FLOOR,
         "event_classes": [e.value for e in EventClass],
+        "event_class_letter_ru": {
+            EventClass.POSSIBLE_PACKOFF.value: (
+                "кандидат на ухудшение очистки ствола или ограничение циркуляции"
+            ),
+            EventClass.POSSIBLE_LOST_CIRCULATION.value: "кандидат на поглощение",
+            EventClass.POSSIBLE_INFLUX_CANDIDATE.value: "сигнал, похожий на проявление",
+            EventClass.TORQUE_DRAG_ANOMALY.value: "аномалия крутящего момента и нагрузки",
+            EventClass.SENSOR_QUALITY_ISSUE.value: "проблема качества измерений",
+            EventClass.OPERATION_CHANGE.value: "смена операции",
+            EventClass.SHORT_TRANSIENT.value: "короткий выброс",
+            EventClass.INSUFFICIENT_HISTORY.value: (
+                "недостаток истории для построения базовой линии"
+            ),
+            EventClass.SIGNAL_CONFLICT.value: "конфликт режима и сигналов",
+            EventClass.NORMAL_NOISE.value: "отклонение в пределах ожидаемого шума",
+            EventClass.NONE.value: "нет устойчивого кандидата",
+        },
         "score_semantics": (
             "heuristic_score is an expert rule weight in [0,1], NOT a calibrated probability. "
             "Field calibration requires labeled archive and temporal holdout."
         ),
         "feature_kinds": FEATURE_KIND,
         "claims_boundary": "synthetic_only_requires_field_validation",
+        "readiness_level": READINESS_LEVEL,
+        "industrix_letter_alignment": True,
     }
